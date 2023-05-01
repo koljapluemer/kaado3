@@ -1,16 +1,14 @@
 <template>
   <div id="app-wrapper">
     <header id="desktop-header">
-      <div>
-        <h1 class="font-bold text-xl">
-          <router-link to="/">Kaado.</router-link>
-        </h1>
-        <!-- <nav>
-          <router-link to="/" class="button button-primary small-button" id="lefts-go">Let's Go!</router-link>
-          <router-link to="/new">Add</router-link>
-          <router-link to="/list">My Cards</router-link>
-        </nav> -->
-      </div>
+      <nav class="list-reset flex">
+        <li class="m2">
+          <router-link :to="{name: 'Queue'}">Queue</router-link>
+        </li>
+        <li class="m2">
+          <router-link :to="{name: 'CardList'}">Cards</router-link>
+        </li>
+      </nav>
 
     </header>
 
