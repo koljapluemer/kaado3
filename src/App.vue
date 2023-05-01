@@ -8,6 +8,12 @@
         <li class="m2">
           <router-link :to="{name: 'CardList'}">Cards</router-link>
         </li>
+        <li class="m2">
+          <router-link :to="{name: 'CardAdd'}">Add Card</router-link>
+        </li>
+        <li class="m2">
+          <router-link :to="{name: 'CardImport'}">Import Cards</router-link>
+        </li>
       </nav>
 
     </header>

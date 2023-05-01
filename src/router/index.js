@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from "vue-router";
 import Queue from "../views/Queue.vue";
 import CardList from "../views/CardList.vue";
+import CardAdd from "../views/CardAdd.vue";
 
 const routes = [
   {
@@ -13,6 +14,11 @@ const routes = [
     name: "CardList",
     component: CardList,
   },
+  {
+    path: "/cardadd",
+    name: "CardAdd",
+    component: CardAdd,
+  }
 ];
 
 const router = createRouter({
