@@ -10,6 +10,7 @@ export const useCardsStore = defineStore({
   state: () => ({
     cards: [],
     queueCard: {},
+    cardsLoaded: false
   }),
   getters: {
     getQueueCard: (state) => {
@@ -30,6 +31,7 @@ export const useCardsStore = defineStore({
           console.log('cards loaded from pouchDB: ', doc.rows);
           // set cards to doc.rows
           this.cards = doc.rows.map((r) => r.doc);
+          this.cardsLoaded = true;
         }
       });
     },
