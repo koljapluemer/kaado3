@@ -1,5 +1,5 @@
 <template>
-  <div id="app-wrapper">
+  <div id="app-wrapper" class="p2">
     <header id="desktop-header">
       <nav class="list-reset flex">
         <li class="m2">
@@ -20,7 +20,8 @@
 
 
     <main>
-      <router-view />
+      <div class="" v-if="!store.cardsLoaded">loading...</div>
+      <router-view v-else />
     </main>
   </div>
   <!-- 
@@ -35,9 +36,5 @@ const store = useCardsStore()
 // run loadCardsFromPouchDB()  first thing
 store.loadCardsFromPouchDB()
 
-//  add a watcher for store.cards that saves to PouchDB
-//  whenever store.cards changes
-watch(() => store.cards, () => {
-  store.saveAllCardsToPouchDB()
-}, { deep: true })
+
 </script>

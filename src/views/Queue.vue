@@ -18,18 +18,12 @@ function review(feedback) {
   // TODO:add missing properties when necessary: occurrences, ease, dueAt, parents, children, siblings
   // handle dueAt logic (TODO: differentiate between card types and feedback, for now always set to 24 hours from now
   store.queueCard.dueAt = new Date(Date.now() + 24 * 60 * 60 * 1000)
-
-
   store.getNewQueueCard()
 }
 </script>
 
 <template>
   <div class="p1 flex justify-center flex-column items-center max-width-4 ml-auto mr-auto">
-    <div class="" v-if="!store.cardsLoaded">
-      Loading cards...
-    </div>
-    <div class="" v-else>
       <div id="card" v-if="store.getQueueCard" class=" fit mb4" style="width: 100%">
         <div id="card-info" class="mb2 flex gap">
           <code>{{ store.getQueueCard.type }}</code>
@@ -74,6 +68,9 @@ function review(feedback) {
           </button>
           <button class="mt2" @click=" review('good') ">
             Good
+          </button>
+          <button class="mt2" @click=" review('easy') ">
+            Easy
           </button>
         </div>
       </div>
@@ -167,6 +164,5 @@ function review(feedback) {
           Cool, thanks!
         </button>
       </div>
-    </div>
   </div>
 </template>

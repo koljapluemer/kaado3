@@ -44,16 +44,16 @@ export const useCardsStore = defineStore({
         this.cards.splice(index, 1, updatedCard);
       }
 
-      // // save to pouchDB
-      // updatedCard._id = updatedCard.id;
-      // db.put(updatedCard, function callback(err, result) {
-      //   if (!err) {
-      //     console.log('Successfully updated a card in pouchdb!');
-      //   } else {
-      //     console.log('error updating card in pouchdb: ', err);
-      //   }
-      // }
-      // );
+      // save to pouchDB
+      updatedCard._id = updatedCard.id;
+      db.put(updatedCard, function callback(err, result) {
+        if (!err) {
+          console.log('Successfully updated a card in pouchdb!');
+        } else {
+          console.log('error updating card in pouchdb: ', err);
+        }
+      }
+      );
     },
     async deleteCard(front) {
       // find index of card by front

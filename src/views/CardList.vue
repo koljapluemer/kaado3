@@ -12,11 +12,9 @@ const store = useCardsStore()
             {{ store.cards.length }} cards.
         </p>
         <div class="flex flex-column ">
-            <button class="m1" v-for="card in store.cards" :key="card.id">
-                <div class="front">
-                    {{ card.front }}
-                </div>
-            </button>
+            <router-link class="m1" v-for="card in store.cards" :key="card.id" :to="{ name: 'CardEdit', params: { id: card.id } }">
+                {{ card.front }}
+            </router-link>
         </div>
     </div>
     <p v-else>
