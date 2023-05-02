@@ -37,6 +37,17 @@ export const useCardsStore = defineStore({
     },
     async addCard(card) {
       this.cards.push(card);
+
+      // save to pouchDB
+      card._id = card.id;
+      db.put(card, function callback(err, result) {
+        if (!err) {
+          console.log('Successfully added a card to pouchdb!');
+        } else {
+          console.log('error adding card to pouchdb: ', err);
+        }
+      }
+      );
     },
     async updateCard(updatedCard) {
       const index = this.cards.findIndex((c) => c._id === updatedCard._id);
