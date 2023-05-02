@@ -12,6 +12,10 @@ const id = route.params.id
 // get card from store
 const card = store.cards.find(card => card.id === id)
 
+function updateCard() {
+    store.updateCard(card)
+}
+
 </script>
 
 <template>
@@ -21,6 +25,6 @@ const card = store.cards.find(card => card.id === id)
         <input id="front" v-model="card.front" />
         <label for="back">Back</label>
         <input id="back" v-model="card.back" />
-        <button type="submit">Edit Card</button>
+        <button type="submit" @click="updateCard">Edit Card</button>
     </form>
 </template>

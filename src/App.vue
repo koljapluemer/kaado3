@@ -27,10 +27,11 @@
   <component is="script" data-goatcounter="https://kaado-3353450qe3232.goatcounter.com/count" async
     src="//gc.zgo.at/count.js"></component> -->
 </template>
-<script>
+<script setup>
+import { useCardsStore } from './stores/cards'
 
-export default {
-  name: "App",
-  el: "#app"
-};
+const store = useCardsStore()
+// run loadCardsFromPouchDB()  first thing
+store.loadCardsFromPouchDB()
+ 
 </script>

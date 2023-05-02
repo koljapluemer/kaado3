@@ -1,6 +1,9 @@
 import { defineStore } from 'pinia'
 import { v4 as uuidv4 } from "uuid";
 
+var db = new PouchDB('elephant');
+var remoteCouch = false;
+
 
 export const useCardsStore = defineStore({
   id: 'cards',
@@ -18,6 +21,18 @@ export const useCardsStore = defineStore({
     }
   },
   actions: {
+    async loadCardsFromPouchDB() {
+      // load cards from pouchDB, using arrow function to preserve 'this'
+      db.allDocs({ include_docs: true, descending: true }, (err, doc) => {
+        if (err) {
+          console.log('error loading cards from pouchDB: ', err);
+        } else {
+          console.log('cards loaded from pouchDB: ', doc.rows);
+          // set cards to doc.rows
+          this.cards = doc.rows;
+        }
+      });
+    },
     async addCard(card) {
       this.cards.push(card);
     },
@@ -26,6 +41,17 @@ export const useCardsStore = defineStore({
       if (index !== -1) {
         this.cards.splice(index, 1, updatedCard);
       }
+
+      // save to pouchDB
+      updatedCard._id = updatedCard.id;
+      db.put(updatedCard, function callback(err, result) {
+        if (!err) {
+          console.log('Successfully updated a card in pouchdb!');
+        } else {
+          console.log('error updating card in pouchdb: ', err);
+        }
+      }
+      );
     },
     async deleteCard(front) {
       // find index of card by front
