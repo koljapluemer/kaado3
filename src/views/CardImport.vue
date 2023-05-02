@@ -2,6 +2,7 @@
 import { ref } from 'vue'
 import { VueCsvToggleHeaders, VueCsvSubmit, VueCsvMap, VueCsvInput, VueCsvErrors, VueCsvImport } from 'vue-csv-import';
 import { useCardsStore } from '../stores/cards'
+
 const store = useCardsStore()
 
 const csvCards = ref([])
