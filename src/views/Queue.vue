@@ -33,6 +33,10 @@ function review(feedback) {
         <button @click="store.deleteCard(store.getQueueCard.front); store.getNewQueueCard()">
           Delete
         </button>
+        <!-- Edit button -->
+        <router-link v-if="store.queueCard.id" :to="{ name: 'CardEdit', params: { id: store.getQueueCard.id } }">
+          Edit
+        </router-link>
       </div>
       <div class="p2 border fit">
         <Markdown id="front" class="" :source=" store.getQueueCard.front " />
@@ -152,7 +156,7 @@ function review(feedback) {
     </div>
 
     <!-- MISC -->
-    <div class="flex gap" v-if=" store.getQueueCard.type == 'misc' || store.getQueueCard.type == '' ">
+    <div class="flex gap" v-if=" store.getQueueCard.type == 'misc' || !store.getQueueCard.type">
       <button class="mt2" @click=" review('show-next') ">
         I already knew that...
       </button>

@@ -3,6 +3,7 @@ import Queue from "../views/Queue.vue";
 import CardList from "../views/CardList.vue";
 import CardAdd from "../views/CardAdd.vue";
 import CardImport from "../views/CardImport.vue";
+import CardEdit from "../views/CardEdit.vue";
 
 const routes = [
   {
@@ -25,6 +26,11 @@ const routes = [
     name: "CardImport",
     component: CardImport,
   },
+  {
+    path: "/cardedit/:id",
+    name: "CardEdit",
+    component: CardEdit,
+  }
 ];
 
 const router = createRouter({
