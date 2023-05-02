@@ -10,6 +10,7 @@ async function importCards() {
     console.log(`importing ${csvCards.value.length} cards`)
     // append cards to store
     store.cards = [...store.cards, ...csvCards.value]
+    console.log(`Store now has ${store.cards.length} cards`)
 }
 </script>
 

@@ -27,10 +27,13 @@ export const useCardsStore = defineStore({
         this.cards.splice(index, 1, updatedCard);
       }
     },
-    async deleteCard(id) {
-      const index = this.cards.findIndex((c) => c._id === id);
+    async deleteCard(front) {
+      const index = this.cards.findIndex((c) => c.front === front);
       if (index !== -1) {
         this.cards.splice(index, 1);
+        console.log('deleted card');
+      } else {
+        console.log('card not found');
       }
     },
     getNewQueueCard() {
