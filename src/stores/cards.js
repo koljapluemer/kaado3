@@ -34,7 +34,9 @@ export const useCardsStore = defineStore({
       }
     },
     getNewQueueCard() {
-      this.queueCard = this.cards[Math.floor(Math.random() * this.cards.length)];
+      // filter for cards where dueAt does not exist or is in the past
+      const filteredCards = this.cards.filter((c) => !c.dueAt || c.dueAt < new Date());
+      this.queueCard = filteredCards[Math.floor(Math.random() * filteredCards.length)];
     }
   },
   persist: {
