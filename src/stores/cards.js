@@ -28,11 +28,11 @@ export const useCardsStore = defineStore({
       }
     },
     async deleteCard(front) {
-      console.log('deleting card: ', front);
+      // find index of card by front
       const index = this.cards.findIndex((c) => c.front === front);
       console.log('index: ', index);
       if (index !== -1) {
-        this.$delete(this.cards, index);
+        this.cards.splice(index, 1);
         console.log('deleted card');
       } else {
         console.log('card not found');
