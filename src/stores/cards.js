@@ -29,7 +29,7 @@ export const useCardsStore = defineStore({
         } else {
           console.log('cards loaded from pouchDB: ', doc.rows);
           // set cards to doc.rows
-          this.cards = doc.rows;
+          this.cards = doc.rows.map((r) => r.doc);
         }
       });
     },
@@ -42,16 +42,16 @@ export const useCardsStore = defineStore({
         this.cards.splice(index, 1, updatedCard);
       }
 
-      // save to pouchDB
-      updatedCard._id = updatedCard.id;
-      db.put(updatedCard, function callback(err, result) {
-        if (!err) {
-          console.log('Successfully updated a card in pouchdb!');
-        } else {
-          console.log('error updating card in pouchdb: ', err);
-        }
-      }
-      );
+      // // save to pouchDB
+      // updatedCard._id = updatedCard.id;
+      // db.put(updatedCard, function callback(err, result) {
+      //   if (!err) {
+      //     console.log('Successfully updated a card in pouchdb!');
+      //   } else {
+      //     console.log('error updating card in pouchdb: ', err);
+      //   }
+      // }
+      // );
     },
     async deleteCard(front) {
       // find index of card by front
@@ -81,6 +81,24 @@ export const useCardsStore = defineStore({
       if (!this.queueCard) {
         this.queueCard = {};
       }
+    },
+    saveAllCardsToPouchDB() {
+      // save all cards to pouchDB
+      this.cards.forEach((c) => {
+        if (!c.id) {
+          c.id = uuidv4();
+        }
+        c._id = c.id;
+
+        db.put(c, function callback(err, result) {
+          if (!err) {
+            console.log('Successfully saved a card to pouchdb!');
+          } else {
+            console.log('error saving card to pouchdb: ', err);
+          }
+        }
+        );
+      });
     }
   },
   persist: {
