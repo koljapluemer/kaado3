@@ -75,8 +75,21 @@ export const useCardsStore = defineStore({
       const index = this.cards.findIndex((c) => c.front === front);
       console.log('index: ', index);
       if (index !== -1) {
+        // delete from pouchDB
+        db.get(this.cards[index]._id, function (err, doc) {
+          if (err) {
+            console.log('error deleting card from pouchdb: ', err);
+          }
+          db.remove(doc, function (err, response) {
+            if (err) {
+              console.log('error deleting card from pouchdb: ', err);
+            }
+            console.log('deleted card from pouchdb');
+          });
+        });
+
         this.cards.splice(index, 1);
-        console.log('deleted card');
+        console.log('deleted card, we now have this many cards: ', this.cards.length);
       } else {
         console.log('card not found');
       }
