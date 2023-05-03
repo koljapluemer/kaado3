@@ -15,31 +15,38 @@ const isRevealed = ref(false)
 function review(feedback) {
   isRevealed.value = false
   // logic to update card
-  // TODO:add missing properties when necessary: occurrences, ease, dueAt, parents, children, siblings
-  // handle dueAt logic (TODO: differentiate between card types and feedback, for now always set to 24 hours from now
-  store.queueCard.dueAt = new Date(Date.now() + 24 * 60 * 60 * 1000)
+  // TODO:add missing properties when necessary: occurrences, ease, due_at, parents, children, siblings
+  // handle due_at logic (TODO: differentiate between card types and feedback, for now always set to 24 hours from now
+  const card = store.queueCard
+  card.due_at = new Date(Date.now() + 24 * 60 * 60 * 1000)
+  console.log('sending card to store: ', card)
+
+  store.updateCard(card)
   store.getNewQueueCard()
 }
+
+// use card value as a ref
+const card = ref(store.queueCard)
 </script>
 
 <template>
   <div class="p1 flex justify-center flex-column items-center max-width-4 ml-auto mr-auto">
-      <div id="card" v-if="store.getQueueCard" class=" fit mb4" style="width: 100%">
+      <div id="card" v-if="card" class=" fit mb4" style="width: 100%">
         <div id="card-info" class="mb2 flex gap">
-          <code>{{ store.getQueueCard.type }}</code>
-          <button @click="store.deleteCard(store.getQueueCard.front); store.getNewQueueCard()">
+          <code>{{ store.queueCard.type }}</code>
+          <button @click="store.deleteCard(store.queueCard.front); store.getNewQueueCard()">
             Delete
           </button>
           <!-- Edit button -->
-          <router-link v-if=" store.queueCard.id " :to=" { name: 'CardEdit', params: { id: store.getQueueCard.id } } ">
+          <router-link v-if=" store.queueCard.id " :to=" { name: 'CardEdit', params: { id: store.queueCard.id } } ">
             Edit
           </router-link>
         </div>
         <div class="p2 border fit">
-          <Markdown id="front" class="" :source=" store.getQueueCard.front " />
-          <div class="" v-if=" isRevealed && store.getQueueCard.type == 'learn' ">
+          <Markdown id="front" class="" :source=" store.queueCard.front " />
+          <div class="" v-if=" isRevealed && store.queueCard.type == 'learn' ">
             <hr>
-            <Markdown id="back" v-if=" isRevealed " :source=" store.getQueueCard.back " />
+            <Markdown id="back" v-if=" isRevealed " :source=" store.queueCard.back " />
           </div>
         </div>
 
@@ -49,7 +56,7 @@ function review(feedback) {
       </p>
 
       <!-- LEARN -->
-      <div v-if=" store.getQueueCard.type == 'learn' ">
+      <div v-if=" store.queueCard.type == 'learn' ">
         <button class="mt2" @click=" isRevealed = !isRevealed " v-if=" !isRevealed ">
           Reveal
         </button>
@@ -76,7 +83,7 @@ function review(feedback) {
       </div>
 
       <!-- HABIT -->
-      <div class="flex gap" v-if=" store.getQueueCard.type == 'habit' ">
+      <div class="flex gap" v-if=" store.queueCard.type == 'habit' ">
         <button class="mt2" @click=" review('not-today') ">
           Not Today
         </button>
@@ -89,7 +96,7 @@ function review(feedback) {
       </div>
 
       <!-- CHECK -->
-      <div class="flex gap" v-if=" store.getQueueCard.type == 'check' ">
+      <div class="flex gap" v-if=" store.queueCard.type == 'check' ">
         <button class="mt2" @click=" review('no') ">
           No
         </button>
@@ -102,7 +109,7 @@ function review(feedback) {
       </div>
 
       <!-- TODO -->
-      <div class="flex gap" v-if=" store.getQueueCard.type == 'todo' ">
+      <div class="flex gap" v-if=" store.queueCard.type == 'todo' ">
         <button class="mt2" @click=" review('not-today') ">
           Not Today
         </button>
@@ -117,7 +124,7 @@ function review(feedback) {
 
 
       <!-- ARTICLE -->
-      <div class="flex gap" v-if=" store.getQueueCard.type == 'article' ">
+      <div class="flex gap" v-if=" store.queueCard.type == 'article' ">
         <button class="mt2" @click=" review('not-today') ">
           Not Today
         </button>
@@ -133,7 +140,7 @@ function review(feedback) {
       </div>
 
       <!-- BOOK -->
-      <div class="flex gap" v-if=" store.getQueueCard.type == 'book' ">
+      <div class="flex gap" v-if=" store.queueCard.type == 'book' ">
         <button class="mt2" @click=" review('not-today') ">
           Not Today
         </button>
@@ -149,14 +156,14 @@ function review(feedback) {
       </div>
 
       <!-- PROJECT -->
-      <div class="flex gap" v-if=" store.getQueueCard.type == 'project' ">
+      <div class="flex gap" v-if=" store.queueCard.type == 'project' ">
         <button class="mt2" @click=" review('done') ">
           Ok, got it scheduled
         </button>
       </div>
 
       <!-- MISC -->
-      <div class="flex gap" v-if=" store.getQueueCard.type == 'misc' || !store.getQueueCard.type ">
+      <div class="flex gap" v-if=" store.queueCard.type == 'misc' || !store.queueCard.type ">
         <button class="mt2" @click=" review('show-next') ">
           I already knew that...
         </button>
@@ -164,5 +171,7 @@ function review(feedback) {
           Cool, thanks!
         </button>
       </div>
+
+      {{ store.queueCard }}
   </div>
 </template>

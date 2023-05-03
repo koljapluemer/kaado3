@@ -59,6 +59,8 @@ export const useCardsStore = defineStore({
         this.cards.splice(index, 1, updatedCard);
       }
 
+      console.log('saving card to db: ', updatedCard);
+
       // save to pouchDB
       updatedCard._id = updatedCard.id;
       db.put(updatedCard, function callback(err, result) {
@@ -95,36 +97,29 @@ export const useCardsStore = defineStore({
       }
     },
     getNewQueueCard() {
-      // filter for cards where dueAt does not exist or is in the past, also type cannot be undefined
+      // filter for cards where due_at does not exist or is in the past, also type cannot be undefined
       try {
         let randomCard = {};
         let filteredCards = [];
         const types = ['learn', 'todo', 'habit', 'check', 'misc', 'article', 'book'];
         const randomType = types[Math.floor(Math.random() * types.length)];
-        console.log('randomType: ', randomType);
-        // filter for cards where dueAt does not exist or is in the past, also type cannot be undefined, also is_active must be true or "True", and conform to randomType
-        filteredCards = this.cards.filter((c) => (!c.dueAt || c.dueAt < new Date())
+        console.log('picking card of random type: ', randomType);
+        // filter for cards where due_at does not exist or is in the past, also type cannot be undefined, also is_active must be true or "True", and conform to randomType
+        filteredCards = this.cards.filter((c) => (!c.due_at || c.due_at < new Date())
           && (c.is_active === true || c.is_active === "True")
           && c.type === randomType);
         // if no cards match, do again without type
         if (filteredCards.length > 0) {
           randomCard = filteredCards[Math.floor(Math.random() * filteredCards.length)];
           console.log('new queue card: ', randomCard);
-        }
-
-        // if no cards match, do again without type
-        if (randomCard === {}) {
+        } else {
           console.log('no cards match type, trying again without type');
-          filteredCards = this.cards.filter((c) => (!c.dueAt || c.dueAt < new Date())
+          filteredCards = this.cards.filter((c) => (!c.due_at || c.due_at < new Date())
             && (c.is_active === true || c.is_active === "True"));
           randomCard = filteredCards[Math.floor(Math.random() * filteredCards.length)];
 
         }
 
-        // if queueCard has no id, add one
-        if (!randomCard.id) {
-          randomCard.id = uuidv4();
-        }
         this.queueCard = randomCard;
 
       } catch (error) {

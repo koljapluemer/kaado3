@@ -39,7 +39,7 @@
     <button type="submit" @click="updateCard">Save</button>
 
     <!-- is_started: {{  card.is_started }} -->
-    <!-- card: {{  card }} -->
+    card: {{  card }}
 </template>
 
 <script setup>
