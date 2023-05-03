@@ -20,7 +20,7 @@
 
         <hr>
 
-        <TagInput v-model="card.taglist"/>
+        <TagInput v-model="card.taglist" />
         <!-- is_active, is_priority, is_started -->
         <div class="flex gap items-center">
             <input type="checkbox" id="is_active" v-model="editCard.is_active">
@@ -48,7 +48,6 @@
         <br>
         current date: {{ new Date().getTime() }}
     </details>
-    
 </template>
 
 <script>
@@ -58,6 +57,7 @@ import { useCardsStore } from '../stores/cards'
 import { defineProps } from 'vue'
 // import local component TagInput
 import TagInput from '../components/TagInput.vue'
+import { v4 as uuidv4 } from 'uuid';
 
 export default {
     name: 'CardForm',
@@ -96,7 +96,21 @@ export default {
             if (props.mode == "add") {
                 console.log('COMPONENT: addCard', editCard.value)
                 store.addCard(editCard.value)
-                editCard.value = {}
+                editCard.value = {
+                    id: uuidv4(),
+                    is_active: true,
+                    is_priority: false,
+                    is_started: false,
+                    occurrences: 0,
+                    ease: 1,
+                    repetitions: 0,
+                    interval: 1,
+                    type: 'misc',
+                    front: '',
+                    back: '',
+                    taglist: [],
+                    due: new Date().getTime()
+                }
             }
             else if (props.mode == "edit") {
                 console.log('COMPONENT: updateCard', editCard.value)
