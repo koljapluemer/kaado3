@@ -1,8 +1,8 @@
 <template>
-    <!-- basic form to add a new card -->
-    <form class="p3 border" @submit.prevent="addCard">
+    <!-- basic form to add a new editCard -->
+    <form class="p3 border" @submit.prevent="addeditCard">
         <label for="type">Type</label>
-        <select id="type" v-model="card.type">
+        <select id="type" v-model="editCard.type">
             <option value="learn">Learn</option>
             <option value="habit">Habit</option>
             <option value="todo">Todo</option>
@@ -12,78 +12,97 @@
             <option value="misc">Misc</option>
         </select>
         <label for="front">Front</label>
-        <textarea id="front" v-model="card.front" rows="20" cols="80"></textarea>
-        <div class="" v-if="card.type == 'learn'">
+        <textarea id="front" v-model="editCard.front" rows="20" cols="80"></textarea>
+        <div class="" v-if="editCard.type == 'learn'">
             <label for="back">Back</label>
-            <textarea id="back" v-model="card.back" rows="20" cols="80"></textarea>
+            <textarea id="back" v-model="editCard.back" rows="20" cols="80"></textarea>
         </div>
 
         <hr>
+
+        <!-- <VoerroTagsInput element-id="tags" v-model="editCard.tags" :existing-tags="[
+                { key: 1, value: 'Web Development' },
+                { key: 2, value: 'PHP' },
+                { key: 3, value: 'JavaScript' },
+            ]" :typeahead="true">
+        </VoerroTagsInput> -->
+
+
         <!-- is_active, is_priority, is_started -->
         <div class="flex gap items-center">
-            <input type="checkbox" id="is_active" v-model="card.is_active">
+            <input type="checkbox" id="is_active" v-model="editCard.is_active">
             <label for="is_active">active</label>
         </div>
 
         <div class="flex gap items-center">
-            <input type="checkbox" id="is_priority" v-model="card.is_priority">
+            <input type="checkbox" id="is_priority" v-model="editCard.is_priority">
             <label for="is_priority">high priority</label>
         </div>
 
-        <div class="flex gap items-center" v-if="card.type == 'book'">
-            <input type="checkbox" id="is_started" v-model="card.is_started">
+        <div class="flex gap items-center" v-if="editCard.type == 'book'">
+            <input type="checkbox" id="is_started" v-model="editCard.is_started">
             <label for="is_started">book started</label>
         </div>
         <hr>
     </form>
-    <button type="submit" @click="updateCard">Save</button>
+    <button type="submit" @click="updateeditCard">Save</button>
 
-    <!-- is_started: {{  card.is_started }} -->
-    card: {{  card }}
+    <!-- is_started: {{  editCard.is_started }} -->
+    editCard: {{ editCard }}
 </template>
 
-<script setup>
+<script>
 import { ref } from 'vue'
 import { useCardsStore } from '../stores/cards'
 import { v4 as uuidv4 } from 'uuid';
+import VoerroTagsInput from '@voerro/vue-tagsinput';
 
-const store = useCardsStore()
+import { defineProps } from 'vue'
 
-// props "card" and "mode" are passed in 
-// mode is either "edit" or "add"
-const props = defineProps({
-    card: {
-        type: Object,
-        required: true
-    },
-    mode: {
-        type: String,
-        required: true
-    }
-})
+export default {
+    name: 'CardForm',
+    props: ['card', 'mode'],
+    setup(props) {
+        const store = useCardsStore()
 
-const card = ref(
-    Object.assign({
-        id: uuidv4(),
-        is_active: true,
-        is_priority: false,
-        is_started: false,
-        occurrences: 0,
-        ease: 1,
-        repetitions: 0,
-        interval: 1,
-        type: 'misc'
-    }, props.card)
-)
+        // props "editCard" and "mode" are passed in 
+        // mode is either "edit" or "add"
+        const editCard = ref(props.card)
 
-function updateCard() {
-    if (props.mode == "add") {
-        store.addCard(card.value)
-        card.value = {}
-    }
-    else if (props.mode == "edit") {
-        store.updateCard(card.value)
+
+        const tags = ref([])
+
+        function updateCard() {
+            if (props.mode == "add") {
+                store.addCard(editCard.value)
+                editCard.value = {}
+            }
+            else if (props.mode == "edit") {
+                store.updateCard(editCard.value)
+            }
+        }
+
+        return {
+            editCard,
+            tags,
+        }
+
     }
 }
+
+// id: uuidv4(),
+// is_active: true,
+// is_priority: false,
+// is_started: false,
+// occurrences: 0,
+// ease: 1,
+// repetitions: 0,
+// interval: 1,
+// type: 'misc',
+// front: '',
+// back: '',
+// const editCard = ref(
+//     props.editCard
+// )
 
 </script>

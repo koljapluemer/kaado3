@@ -13,11 +13,6 @@ const id = route.params.id
 // get card from store
 const card = store.cards.find(card => card.id === id)
 
-function updateCard() {
-    store.updateCard(card)
-}
-
-
 </script>
 
 <template>
