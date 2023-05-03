@@ -39,6 +39,7 @@ export const useCardsStore = defineStore({
       this.cards.push(card);
 
       // save to pouchDB
+      console.log('saving card to pouchdb: ', card);
       card._id = card.id;
       db.put(card, function callback(err, result) {
         if (!err) {
@@ -93,8 +94,8 @@ export const useCardsStore = defineStore({
         if (randomType === 'book') {
           const startedBooks = this.cards.filter((c) => c.type === 'book' && (c.is_started === true || c.is_started === "True"));
           const notStartedBooks = this.cards.filter((c) => c.type === 'book' && (c.is_started === false || c.is_started === "False"));
-          console.log('there are ', notStartedBooks.length, ' not started books');
-          console.log('there are ', startedBooks.length, ' started books');
+          console.log('there are ', notStartedBooks.length, ' not started books: ', notStartedBooks);
+          console.log('there are ', startedBooks.length, ' started books: ', startedBooks);
           if (startedBooks.length < 5 && notStartedBooks.length > 0) {
             console.log('getting a not started book');
             // get only a book that is due

@@ -62,17 +62,27 @@ const props = defineProps({
     }
 })
 
-const card = ref(props.card)
+const card = ref(
+    Object.assign({
+        id: uuidv4(),
+        is_active: true,
+        is_priority: false,
+        is_started: false,
+        occurrences: 0,
+        ease: 1,
+        repetitions: 0,
+        interval: 1,
+        type: 'misc'
+    }, props.card)
+)
 
 function updateCard() {
     if (props.mode == "add") {
-        props.card.id = uuidv4()
-        store.addCard(props.card)
-        // reset card
-        props.card = {}
+        store.addCard(card.value)
+        card.value = {}
     }
     else if (props.mode == "edit") {
-        store.updateCard(props.card)
+        store.updateCard(card.value)
     }
 }
 
