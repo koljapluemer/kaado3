@@ -9,14 +9,23 @@ export const useCardsStore = defineStore({
   id: 'cards',
   state: () => ({
     cards: [],
-    queueCard: {},
-    cardsLoaded: false
+    queueCard: undefined,
+    cardsLoaded: false,
+    cardsLeftToDo: false
   }),
   getters: {
     getQueueCard: (state) => {
       // if queueCard is empty, set it to a random new one
-      if (!state.queueCard.id) {
-        state.queueCard = state.cards[Math.floor(Math.random() * state.cards.length)];
+      if (!state.queueCard) {
+        // only get cards that are due or past due, and are active
+        const filteredCards = state.cards.filter((c) => (
+          (c.due_at < new Date()) &&
+          (c.is_active === true || c.is_active === "True")))
+          ;
+        if (filteredCards.length > 0) {
+          state.queueCard = filteredCards[Math.floor(Math.random() * filteredCards.length)];
+          state.cardsLeftToDo = true;
+        }
       }
       return state.queueCard;
     }
@@ -100,24 +109,28 @@ export const useCardsStore = defineStore({
       // filter for cards where due_at does not exist or is in the past, also type cannot be undefined
       try {
         let randomCard = {};
-        let filteredCards = [];
+        // only get cards that are due or past due, and are active
+
         const types = ['learn', 'todo', 'habit', 'check', 'misc', 'article', 'book'];
         const randomType = types[Math.floor(Math.random() * types.length)];
         console.log('picking card of random type: ', randomType);
         // filter for cards where due_at does not exist or is in the past, also type cannot be undefined, also is_active must be true or "True", and conform to randomType
-        filteredCards = this.cards.filter((c) => (!c.due_at || c.due_at < new Date())
+        let filteredCards = this.cards.filter((c) => (!c.due_at || c.due_at < new Date())
           && (c.is_active === true || c.is_active === "True")
           && c.type === randomType);
         // if no cards match, do again without type
         if (filteredCards.length > 0) {
           randomCard = filteredCards[Math.floor(Math.random() * filteredCards.length)];
           console.log('new queue card: ', randomCard);
+          this.cardsLeftToDo = true;
         } else {
           console.log('no cards match type, trying again without type');
           filteredCards = this.cards.filter((c) => (!c.due_at || c.due_at < new Date())
             && (c.is_active === true || c.is_active === "True"));
-          randomCard = filteredCards[Math.floor(Math.random() * filteredCards.length)];
-
+          if (filteredCards.length > 0) {
+            this.cardsLeftToDo = true;
+            randomCard = filteredCards[Math.floor(Math.random() * filteredCards.length)];
+          }
         }
 
         this.queueCard = randomCard;

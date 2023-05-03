@@ -44,7 +44,6 @@
 <script>
 import { ref, watch, reactive } from 'vue'
 import { useCardsStore } from '../stores/cards'
-import { v4 as uuidv4 } from 'uuid';
 
 import { defineProps } from 'vue'
 // import local component TagInput
@@ -104,20 +103,5 @@ export default {
 
     }
 }
-
-// id: uuidv4(),
-// is_active: true,
-// is_priority: false,
-// is_started: false,
-// occurrences: 0,
-// ease: 1,
-// repetitions: 0,
-// interval: 1,
-// type: 'misc',
-// front: '',
-// back: '',
-// const editCard = ref(
-//     props.editCard
-// )
 
 </script>

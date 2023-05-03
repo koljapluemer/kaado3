@@ -53,7 +53,8 @@ const card = ref(store.queueCard)
 
 <template>
   <div class="p1 flex justify-center flex-column items-center max-width-4 ml-auto mr-auto">
-      <div id="card" v-if="store.getQueueCard" class=" fit mb4" style="width: 100%">
+    <div class="" v-if="store.cardsLeftToDo">
+      <div id="card" class=" fit mb4" style="width: 100%">
         <div id="card-info" class="mb2 flex gap">
           <code>{{ store.queueCard.type }}</code>
           <button @click="store.deleteCard(store.queueCard.front); store.getNewQueueCard()">
@@ -73,9 +74,6 @@ const card = ref(store.queueCard)
         </div>
 
       </div>
-      <p v-else>
-        cards loading...
-      </p>
 
       <!-- LEARN -->
       <div v-if=" store.queueCard.type == 'learn' ">
@@ -184,6 +182,10 @@ const card = ref(store.queueCard)
           Cool, thanks!
         </button>
       </div>
+    </div>
+    <p v-else>
+      cards loading...
+    </p>
 
   </div>
 </template>
