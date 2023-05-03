@@ -50,6 +50,9 @@ export const useCardsStore = defineStore({
       );
     },
     async updateCard(updatedCard) {
+      if (updatedCard.is_active == 'True') updatedCard.is_active = true;
+      if (updatedCard.is_active == 'False') updatedCard.is_active = false;
+
       const index = this.cards.findIndex((c) => c._id === updatedCard._id);
       if (index !== -1) {
         this.cards.splice(index, 1, updatedCard);
