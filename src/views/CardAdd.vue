@@ -20,7 +20,7 @@ import CardForm from '../components/CardForm.vue'
             front: '',
             back: '',
             taglist: [],
-            due: new Date()
+            due: new Date().getTime()
       }" :mode="'add'" />
 
   

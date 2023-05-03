@@ -19,7 +19,7 @@ export const useCardsStore = defineStore({
       if (!state.queueCard) {
         // only get cards that are due or past due, and are active
         const filteredCards = state.cards.filter((c) => (
-          // (c.due_at < new Date()) &&
+          (c.due < new Date()) &&
           (c.is_active === true || c.is_active === "True")))
           ;
         if (filteredCards.length > 0) {
@@ -118,9 +118,10 @@ export const useCardsStore = defineStore({
         const randomType = types[Math.floor(Math.random() * types.length)];
         console.log('picking card of random type: ', randomType);
         // filter for cards where due_at does not exist or is in the past, also type cannot be undefined, also is_active must be true or "True", and conform to randomType
-        let filteredCards = this.cards.filter((c) => (!c.due_at || c.due_at < new Date())
-          && (c.is_active === true || c.is_active === "True")
-          && c.type === randomType);
+        let filteredCards = this.cards.filter((c) => (
+          c.due < new Date().getTime() &&
+           (c.is_active === true || c.is_active === "True")  &&
+          c.type === randomType));
         // if no cards match, do again without type
         if (filteredCards.length > 0) {
           randomCard = filteredCards[Math.floor(Math.random() * filteredCards.length)];

@@ -45,6 +45,8 @@
             Debugging Details >
         </summary>
         {{ card }}
+        <br>
+        current date: {{ new Date().getTime() }}
     </details>
     
 </template>
