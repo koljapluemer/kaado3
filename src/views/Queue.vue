@@ -4,6 +4,8 @@ import { storeToRefs } from 'pinia'
 import { useCardsStore } from '../stores/cards'
 import Markdown from "vue3-markdown-it";
 
+const fsrs = require("./sr.js")
+
 const components = {
   Markdown
 }
@@ -17,7 +19,27 @@ function review(feedback) {
   // logic to update card
   // TODO:add missing properties when necessary: occurrences, ease, due_at, parents, children, siblings
   // handle due_at logic (TODO: differentiate between card types and feedback, for now always set to 24 hours from now
+  // HANDLE LOGIC WHEN 'learn'
   const card = store.queueCard
+
+  if (card.type == 'learn') {
+    console.log('Grading Learn Card')
+    let grade = -1
+    if (feedback == 'wrong') {
+      grade = 0
+    } else if (feedback == 'good') {
+      grade = 1
+    } else if (feedback == 'easy') {
+      grade = 2
+    }
+    const cardData = {
+      id: card.id
+    }
+    const globalData = null
+    const outputData = fsrs(cardData, grade, globalData)
+    console.log('outputData', outputData)
+
+  }
   card.due_at = new Date(Date.now() + 24 * 60 * 60 * 1000)
   console.log('sending card to store: ', card)
 
@@ -61,17 +83,8 @@ const card = ref(store.queueCard)
           Reveal
         </button>
         <div class="flex gap" v-else>
-          <button class="mt2" @click=" review('blackout') ">
-            Blackout
-          </button>
           <button class="mt2" @click=" review('wrong') ">
             Wrong
-          </button>
-          <button class="mt2" @click=" review('incorrect-but-remembered') ">
-            Incorrect But Remembered
-          </button>
-          <button class="mt2" @click=" review('correct-but-hard') ">
-            Correct But Hard
           </button>
           <button class="mt2" @click=" review('good') ">
             Good
