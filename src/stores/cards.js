@@ -83,9 +83,19 @@ export const useCardsStore = defineStore({
     getNewQueueCard() {
       // filter for cards where dueAt does not exist or is in the past, also type cannot be undefined
       try {
-        // filter for cards where dueAt does not exist or is in the past, also type cannot be undefined, also is_active must be true or "True"
-        const filteredCards = this.cards.filter((c) => (!c.dueAt || c.dueAt < new Date()) && c.type !== undefined && (c.is_active === true || c.is_active === "True"));
-        // const filteredCards = this.cards
+        const types = ['learn', 'todo', 'habit', 'check', 'misc', 'article', 'book'];
+        const randomType = types[Math.floor(Math.random() * types.length)];
+        console.log('randomType: ', randomType);
+        // filter for cards where dueAt does not exist or is in the past, also type cannot be undefined, also is_active must be true or "True", and conform to randomType
+        let filteredCards = this.cards.filter((c) => (!c.dueAt || c.dueAt < new Date())
+          && (c.is_active === true || c.is_active === "True") 
+          && c.type === randomType);
+        // if no cards match, do again without type
+        if (filteredCards.length === 0) {
+          console.log('no cards match type, trying again without type');
+          filteredCards = this.cards.filter((c) => (!c.dueAt || c.dueAt < new Date())
+            && (c.is_active === true || c.is_active === "True"));
+        }
         const randomCard = filteredCards[Math.floor(Math.random() * filteredCards.length)];
         console.log('new queue card: ', randomCard);
 
