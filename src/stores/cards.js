@@ -79,19 +79,21 @@ export const useCardsStore = defineStore({
     },
     getNewQueueCard() {
       // filter for cards where dueAt does not exist or is in the past, also type cannot be undefined
-      // const filteredCards = this.cards.filter((c) => !c.dueAt || c.dueAt < new Date() && c.type !== undefined);
-      const filteredCards = this.cards
-      const randomCard = filteredCards[Math.floor(Math.random() * filteredCards.length)];
-      console.log('new queue card: ', randomCard);
+      try {
+        // filter for cards where dueAt does not exist or is in the past, also type cannot be undefined, also is_active must be true or "True"
+        const filteredCards = this.cards.filter((c) => (!c.dueAt || c.dueAt < new Date()) && c.type !== undefined && (c.is_active === true || c.is_active === "True"));
+        // const filteredCards = this.cards
+        const randomCard = filteredCards[Math.floor(Math.random() * filteredCards.length)];
+        console.log('new queue card: ', randomCard);
 
-      // if queueCard has no id, add one
-      if (!randomCard.id) {
-        randomCard.id = uuidv4();
-      }
-      this.queueCard = randomCard;
+        // if queueCard has no id, add one
+        if (!randomCard.id) {
+          randomCard.id = uuidv4();
+        }
+        this.queueCard = randomCard;
 
-      // if undefined, set queueCard to {}
-      if (!this.queueCard) {
+      } catch (error) {
+        console.log('error getting new queue card: ', error);
         this.queueCard = {};
       }
     },
