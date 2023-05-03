@@ -20,8 +20,7 @@
 
         <hr>
 
-        <vue3-tags-input :tags="tags" placeholder="input tags" class="mb3" />
-
+        <TagInput v-model="card.taglist"/>
         <!-- is_active, is_priority, is_started -->
         <div class="flex gap items-center">
             <input type="checkbox" id="is_active" v-model="editCard.is_active">
@@ -40,24 +39,22 @@
         <hr>
     </form>
     <button type="submit" @click="updateCard">Save</button>
-
-    <!-- is_started: {{  editCard.is_started }} -->
-    editCard: {{ editCard }}
 </template>
 
 <script>
-import { ref, watch } from 'vue'
+import { ref, watch, reactive } from 'vue'
 import { useCardsStore } from '../stores/cards'
 import { v4 as uuidv4 } from 'uuid';
-import Vue3TagsInput from 'vue3-tags-input';
 
 import { defineProps } from 'vue'
+// import local component TagInput
+import TagInput from '../components/TagInput.vue'
 
 export default {
     name: 'CardForm',
     props: ['card', 'mode'],
     components: {
-        Vue3TagsInput
+        TagInput
     },
     setup(props) {
         const store = useCardsStore()
@@ -66,7 +63,7 @@ export default {
         // mode is either "edit" or "add"
         const editCard = ref(props.card)
         // if tags of card is a string, convert to array
-        if (typeof editCard.value.tags == 'string') {
+        if (typeof editCard.value.tags == 'string' && !editCard.value.taglist) {
             editCard.value.taglist = editCard.value.tags.split(' ')
         } else {
             // if taglist does not exist, create empty array
@@ -76,7 +73,7 @@ export default {
         }
 
 
-        const tags = ref(editCard.value.taglist)
+        const tags = ref([])
         // add a watcher for tags that sets cards.taglist
         // when tags changes
         // this is needed because the tags input component is not reactive?!
