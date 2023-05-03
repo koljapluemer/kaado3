@@ -93,6 +93,7 @@ export const useCardsStore = defineStore({
         if (randomType === 'book') {
           const startedBooks = this.cards.filter((c) => c.type === 'book' && (c.is_started === true || c.is_started === "True"));
           const notStartedBooks = this.cards.filter((c) => c.type === 'book' && (c.is_started === false || c.is_started === "False"));
+          console.log('there are ', notStartedBooks.length, ' not started books');
           console.log('there are ', startedBooks.length, ' started books');
           if (startedBooks.length < 5 && notStartedBooks.length > 0) {
             console.log('getting a not started book');
@@ -107,6 +108,7 @@ export const useCardsStore = defineStore({
             // get only a book that is due
             const filteredCards = startedBooks.filter((c) => (!c.dueAt || c.dueAt < new Date()));
             if (filteredCards.length > 0) {
+              console.log('found started books that are due: ', filteredCards);
               randomCard = filteredCards[Math.floor(Math.random() * filteredCards.length)];
             }
           }
@@ -116,18 +118,20 @@ export const useCardsStore = defineStore({
             && (c.is_active === true || c.is_active === "True")
             && c.type === randomType);
           // if no cards match, do again without type
-
-          randomCard = filteredCards[Math.floor(Math.random() * filteredCards.length)];
-          console.log('new queue card: ', randomCard);
+          if (filteredCards.length > 0) {
+            randomCard = filteredCards[Math.floor(Math.random() * filteredCards.length)];
+            console.log('new queue card: ', randomCard);
+          }
         }
 
         // if no cards match, do again without type
-        if (filteredCards.length === 0) {
+        if (randomCard === {}) {
           console.log('no cards match type, trying again without type');
           filteredCards = this.cards.filter((c) => (!c.dueAt || c.dueAt < new Date())
             && (c.is_active === true || c.is_active === "True"));
+          randomCard = filteredCards[Math.floor(Math.random() * filteredCards.length)];
+
         }
-        randomCard = filteredCards[Math.floor(Math.random() * filteredCards.length)];
 
         // if queueCard has no id, add one
         if (!randomCard.id) {

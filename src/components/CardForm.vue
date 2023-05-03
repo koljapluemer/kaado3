@@ -37,6 +37,9 @@
         <hr>
     </form>
     <button type="submit" @click="updateCard">Save</button>
+
+    <!-- is_started: {{  card.is_started }} -->
+    <!-- card: {{  card }} -->
 </template>
 
 <script setup>
@@ -58,6 +61,9 @@ const props = defineProps({
         required: true
     }
 })
+
+const card = ref(props.card)
+
 function updateCard() {
     if (props.mode == "add") {
         props.card.id = uuidv4()
