@@ -20,7 +20,7 @@
 
         <hr>
 
-        <vue3-tags-input :tags="card.taglist" placeholder="input tags" class="mb3" />
+        <vue3-tags-input :tags="tags" placeholder="input tags" class="mb3" />
 
         <!-- is_active, is_priority, is_started -->
         <div class="flex gap items-center">
@@ -46,7 +46,7 @@
 </template>
 
 <script>
-import { ref } from 'vue'
+import { ref, watch } from 'vue'
 import { useCardsStore } from '../stores/cards'
 import { v4 as uuidv4 } from 'uuid';
 import Vue3TagsInput from 'vue3-tags-input';
@@ -76,17 +76,24 @@ export default {
         }
 
 
-        const tags = ref([])
+        const tags = ref(editCard.value.taglist)
+        // add a watcher for tags that sets cards.taglist
+        // when tags changes
+        // this is needed because the tags input component is not reactive?!
+        watch(tags, (newVal, oldVal) => {
+            console.log('watch tags', newVal, oldVal)
+            editCard.value.taglist = newVal
+        })
 
         function updateCard() {
             console.log('COMPONENT: updateCard')
             if (props.mode == "add") {
-                console.log('COMPONENT: addCard')
+                console.log('COMPONENT: addCard', editCard.value)
                 store.addCard(editCard.value)
                 editCard.value = {}
             }
             else if (props.mode == "edit") {
-                console.log('COMPONENT: updateCard')
+                console.log('COMPONENT: updateCard', editCard.value)
                 store.updateCard(editCard.value)
             }
         }
