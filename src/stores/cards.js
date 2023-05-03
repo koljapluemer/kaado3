@@ -19,12 +19,15 @@ export const useCardsStore = defineStore({
       if (!state.queueCard) {
         // only get cards that are due or past due, and are active
         const filteredCards = state.cards.filter((c) => (
-          (c.due_at < new Date()) &&
+          // (c.due_at < new Date()) &&
           (c.is_active === true || c.is_active === "True")))
           ;
         if (filteredCards.length > 0) {
           state.queueCard = filteredCards[Math.floor(Math.random() * filteredCards.length)];
           state.cardsLeftToDo = true;
+        } else {
+          console.log('no cards left to do');
+          state.cardsLeftToDo = false;
         }
       }
       return state.queueCard;
@@ -124,12 +127,16 @@ export const useCardsStore = defineStore({
           console.log('new queue card: ', randomCard);
           this.cardsLeftToDo = true;
         } else {
+            this.cardsLeftToDo = false;
           console.log('no cards match type, trying again without type');
           filteredCards = this.cards.filter((c) => (!c.due_at || c.due_at < new Date())
             && (c.is_active === true || c.is_active === "True"));
           if (filteredCards.length > 0) {
             this.cardsLeftToDo = true;
             randomCard = filteredCards[Math.floor(Math.random() * filteredCards.length)];
+          } else {
+            this.cardsLeftToDo = false;
+            console.log('absolutely no cards left to do');
           }
         }
 

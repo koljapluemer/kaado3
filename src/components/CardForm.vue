@@ -39,6 +39,14 @@
         <hr>
     </form>
     <button type="submit" @click="updateCard">Save</button>
+
+    <details>
+        <summary>
+            Debugging Details >
+        </summary>
+        {{ card }}
+    </details>
+    
 </template>
 
 <script>
