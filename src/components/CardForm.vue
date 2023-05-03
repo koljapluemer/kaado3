@@ -20,13 +20,7 @@
 
         <hr>
 
-        <!-- <VoerroTagsInput element-id="tags" v-model="editCard.tags" :existing-tags="[
-                { key: 1, value: 'Web Development' },
-                { key: 2, value: 'PHP' },
-                { key: 3, value: 'JavaScript' },
-            ]" :typeahead="true">
-        </VoerroTagsInput> -->
-
+        <vue3-tags-input :tags="card.taglist" placeholder="input tags" class="mb3" />
 
         <!-- is_active, is_priority, is_started -->
         <div class="flex gap items-center">
@@ -45,7 +39,7 @@
         </div>
         <hr>
     </form>
-    <button type="submit" @click="updateeditCard">Save</button>
+    <button type="submit" @click="updateCard">Save</button>
 
     <!-- is_started: {{  editCard.is_started }} -->
     editCard: {{ editCard }}
@@ -55,36 +49,53 @@
 import { ref } from 'vue'
 import { useCardsStore } from '../stores/cards'
 import { v4 as uuidv4 } from 'uuid';
-import VoerroTagsInput from '@voerro/vue-tagsinput';
+import Vue3TagsInput from 'vue3-tags-input';
 
 import { defineProps } from 'vue'
 
 export default {
     name: 'CardForm',
     props: ['card', 'mode'],
+    components: {
+        Vue3TagsInput
+    },
     setup(props) {
         const store = useCardsStore()
 
         // props "editCard" and "mode" are passed in 
         // mode is either "edit" or "add"
         const editCard = ref(props.card)
+        // if tags of card is a string, convert to array
+        if (typeof editCard.value.tags == 'string') {
+            editCard.value.taglist = editCard.value.tags.split(' ')
+        } else {
+            // if taglist does not exist, create empty array
+            if (!editCard.value.taglist) {
+                editCard.value.taglist = []
+            }
+        }
 
 
         const tags = ref([])
 
         function updateCard() {
+            console.log('COMPONENT: updateCard')
             if (props.mode == "add") {
+                console.log('COMPONENT: addCard')
                 store.addCard(editCard.value)
                 editCard.value = {}
             }
             else if (props.mode == "edit") {
+                console.log('COMPONENT: updateCard')
                 store.updateCard(editCard.value)
             }
         }
 
+
         return {
             editCard,
             tags,
+            updateCard
         }
 
     }
