@@ -58,7 +58,7 @@ const card = ref(store.queueCard)
   <div class="p1 flex justify-between items-start ">
     <div id="menu" class="flex flex-column gap border-right p1">
       <!-- Edit button -->
-      <router-link v-slot="{ edit }"   v-if="store.queueCard.id"
+      <router-link v-slot="{ edit }"   v-if="store.cardsLeftToDo && store.queueCard"
         :to="{ name: 'CardEdit', params: { id: store.queueCard.id } }">
         <button @click="edit" role="link" class="w-full">
           Edit
@@ -70,7 +70,7 @@ const card = ref(store.queueCard)
           Add
         </button>
       </router-link>
-      <button v-if="store.queueCard.id" @click="store.deleteCard(store.queueCard.front); store.getNewQueueCard()">
+      <button v-if="store.cardsLeftToDo && store.queueCard" @click="store.deleteCard(store.queueCard.front); store.getNewQueueCard()">
         Delete
       </button>
 
