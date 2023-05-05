@@ -1,6 +1,6 @@
 <template>
   <div id="app-wrapper" class="p2">
-    <header id="desktop-header">
+    <header class="mb3">
       <nav class="list-reset flex">
         <li class="m2">
           <router-link :to="{ name: 'Queue' }">Queue</router-link>

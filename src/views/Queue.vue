@@ -55,18 +55,35 @@ const card = ref(store.queueCard)
 </script>
 
 <template>
-  <div class="p1 flex justify-center flex-column items-center max-width-4 ml-auto mr-auto">
-    <div class="" v-if="store.cardsLeftToDo">
-      <div id="card" class=" fit mb4" style="width: 100%">
-        <div id="card-info" class="mb2 flex gap">
-          <code>{{ store.queueCard.type }}</code>
-          <button @click="store.deleteCard(store.queueCard.front); store.getNewQueueCard()">
-            Delete
-          </button>
-          <!-- Edit button -->
-          <router-link v-if=" store.queueCard.id " :to=" { name: 'CardEdit', params: { id: store.queueCard.id } } ">
-            Edit
-          </router-link>
+  <div class="p1 flex justify-between items-start ">
+    <div id="menu" class="flex flex-column gap border-right p1">
+      <!-- Edit button -->
+      <router-link v-slot="{ edit }"   v-if="store.queueCard.id"
+        :to="{ name: 'CardEdit', params: { id: store.queueCard.id } }">
+        <button @click="edit" role="link" class="w-full">
+          Edit
+        </button>
+      </router-link>
+      <!-- Add button -->
+      <router-link v-slot="{ add }" :to="{ name: 'CardAdd' }">
+        <button @click="add" role="link" class="w-full">
+          Add
+        </button>
+      </router-link>
+      <button v-if="store.queueCard.id" @click="store.deleteCard(store.queueCard.front); store.getNewQueueCard()">
+        Delete
+      </button>
+
+
+    </div>
+    <div class="flex-auto flex flex-column items-center" v-if=" store.cardsLeftToDo ">
+      <div id="card" class="bg-blue max-width-4 fit mb4" style="width: 100%">
+        <div id="card-info" class="mb2 flex gap ">
+          <code class="">{{ store.queueCard.type }}</code>
+          <div class="border-right"></div>
+          <code v-for="tag in store.queueCard.taglist" class="border-right" :key="tag">
+            {{ tag }}
+          </code>
         </div>
         <div class="p2 border fit">
           <Markdown id="front" class="" :source=" store.queueCard.front " />
@@ -186,7 +203,7 @@ const card = ref(store.queueCard)
         </button>
       </div>
     </div>
-    <p v-else>
+    <p v-else class="center flex-auto">
       cards loading...
     </p>
 

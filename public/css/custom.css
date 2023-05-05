@@ -20,3 +20,7 @@ blockquote {
 textarea {
     height: 260px;
 }
+
+.w-full {
+    width: 100%;
+}
