@@ -46,7 +46,7 @@
         </summary>
         {{ card }}
         <br>
-        current date: {{ new Date().getTime() }}
+        current date: {{ new Date() }}
     </details>
 </template>
 
@@ -109,7 +109,7 @@ export default {
                     front: '',
                     back: '',
                     taglist: [],
-                    due: new Date().getTime()
+                    due: new Date()
                 }
             }
             else if (props.mode == "edit") {
