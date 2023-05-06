@@ -52,13 +52,20 @@ function review(feedback) {
 
 // use card value as a ref
 const card = ref(store.queueCard)
+
+function deleteCard () {
+  if (confirm('Are you sure you want to delete this card?')) {
+    store.deleteCard(store.queueCard)
+    store.getNewQueueCard()
+  }
+}
 </script>
 
 <template>
   <div class="p1 flex justify-between items-start ">
     <div id="menu" class="flex flex-column gap border-right p1">
       <!-- Edit button -->
-      <router-link v-slot="{ edit }"   v-if="store.cardsLeftToDo && store.queueCard"
+      <router-link v-slot="{ edit }" v-if="store.cardsLeftToDo && store.queueCard"
         :to="{ name: 'CardEdit', params: { id: store.queueCard.id } }">
         <button @click="edit" role="link" class="w-full">
           Edit
@@ -70,84 +77,85 @@ const card = ref(store.queueCard)
           Add
         </button>
       </router-link>
-      <button v-if="store.cardsLeftToDo && store.queueCard" @click="store.deleteCard(store.queueCard.front); store.getNewQueueCard()">
+      <!-- open browser confirmation prompt before deleting!! -->
+      <button v-if="store.cardsLeftToDo && store.queueCard" @click="deleteCard">
         Delete
       </button>
 
 
     </div>
-    <div class="flex-auto flex flex-column items-center" v-if=" store.cardsLeftToDo ">
+    <div class="flex-auto flex flex-column items-center" v-if="store.cardsLeftToDo">
       <div id="card" class="bg-blue max-width-4 fit mb4" style="width: 100%">
         <div id="card-info" class="mb2 flex gap ">
           <code class="">{{ store.queueCard.type }}</code>
           <div class="border-right"></div>
           <code v-for="tag in store.queueCard.taglist" class="border-right" :key="tag">
-            {{ tag }}
-          </code>
+              {{ tag }}
+            </code>
         </div>
         <div class="p2 border fit">
-          <Markdown id="front" class="" :source=" store.queueCard.front " />
-          <div class="" v-if=" isRevealed && store.queueCard.type == 'learn' ">
+          <Markdown id="front" class="" :source="store.queueCard.front" />
+          <div class="" v-if="isRevealed && store.queueCard.type == 'learn'">
             <hr>
-            <Markdown id="back" v-if=" isRevealed " :source=" store.queueCard.back " />
+            <Markdown id="back" v-if="isRevealed" :source="store.queueCard.back" />
           </div>
         </div>
 
       </div>
 
       <!-- LEARN -->
-      <div v-if=" store.queueCard.type == 'learn' ">
-        <button class="mt2" @click=" isRevealed = !isRevealed " v-if=" !isRevealed ">
+      <div v-if="store.queueCard.type == 'learn'">
+        <button class="mt2" @click=" isRevealed = !isRevealed" v-if="!isRevealed">
           Reveal
         </button>
         <div class="flex gap" v-else>
-          <button class="mt2" @click=" review('wrong') ">
+          <button class="mt2" @click=" review('wrong')">
             Wrong
           </button>
-          <button class="mt2" @click=" review('good') ">
+          <button class="mt2" @click=" review('good')">
             Good
           </button>
-          <button class="mt2" @click=" review('easy') ">
+          <button class="mt2" @click=" review('easy')">
             Easy
           </button>
         </div>
       </div>
 
       <!-- HABIT -->
-      <div class="flex gap" v-if=" store.queueCard.type == 'habit' ">
-        <button class="mt2" @click=" review('not-today') ">
+      <div class="flex gap" v-if="store.queueCard.type == 'habit'">
+        <button class="mt2" @click=" review('not-today')">
           Not Today
         </button>
-        <button class="mt2" @click=" review('do-later') ">
+        <button class="mt2" @click=" review('do-later')">
           Do Later
         </button>
-        <button class="mt2" @click=" review('done') ">
+        <button class="mt2" @click=" review('done')">
           Done
         </button>
       </div>
 
       <!-- CHECK -->
-      <div class="flex gap" v-if=" store.queueCard.type == 'check' ">
-        <button class="mt2" @click=" review('no') ">
+      <div class="flex gap" v-if="store.queueCard.type == 'check'">
+        <button class="mt2" @click=" review('no')">
           No
         </button>
-        <button class="mt2" @click=" review('kind-of') ">
+        <button class="mt2" @click=" review('kind-of')">
           Kind Of
         </button>
-        <button class="mt2" @click=" review('yes') ">
+        <button class="mt2" @click=" review('yes')">
           Yes
         </button>
       </div>
 
       <!-- TODO -->
-      <div class="flex gap" v-if=" store.queueCard.type == 'todo' ">
-        <button class="mt2" @click=" review('not-today') ">
+      <div class="flex gap" v-if="store.queueCard.type == 'todo'">
+        <button class="mt2" @click=" review('not-today')">
           Not Today
         </button>
-        <button class="mt2" @click=" review('do-later') ">
+        <button class="mt2" @click=" review('do-later')">
           Do Later
         </button>
-        <button class="mt2" @click=" review('done') ">
+        <button class="mt2" @click=" review('done')">
           Done
         </button>
       </div>
@@ -155,50 +163,50 @@ const card = ref(store.queueCard)
 
 
       <!-- ARTICLE -->
-      <div class="flex gap" v-if=" store.queueCard.type == 'article' ">
-        <button class="mt2" @click=" review('not-today') ">
+      <div class="flex gap" v-if="store.queueCard.type == 'article'">
+        <button class="mt2" @click=" review('not-today')">
           Not Today
         </button>
-        <button class="mt2" @click=" review('do-later') ">
+        <button class="mt2" @click=" review('do-later')">
           Do Later
         </button>
-        <button class="mt2" @click=" review('made-some-progress') ">
+        <button class="mt2" @click=" review('made-some-progress')">
           Made Some Progress
         </button>
-        <button class="mt2" @click=" review('finished') ">
+        <button class="mt2" @click=" review('finished')">
           Finished
         </button>
       </div>
 
       <!-- BOOK -->
-      <div class="flex gap" v-if=" store.queueCard.type == 'book' ">
-        <button class="mt2" @click=" review('not-today') ">
+      <div class="flex gap" v-if="store.queueCard.type == 'book'">
+        <button class="mt2" @click=" review('not-today')">
           Not Today
         </button>
-        <button class="mt2" @click=" review('do-later') ">
+        <button class="mt2" @click=" review('do-later')">
           Do Later
         </button>
-        <button class="mt2" @click=" review('done') ">
+        <button class="mt2" @click=" review('done')">
           Done
         </button>
-        <button class="mt2" @click=" review('finished') ">
+        <button class="mt2" @click=" review('finished')">
           Finished Book
         </button>
       </div>
 
       <!-- PROJECT -->
-      <div class="flex gap" v-if=" store.queueCard.type == 'project' ">
-        <button class="mt2" @click=" review('done') ">
+      <div class="flex gap" v-if="store.queueCard.type == 'project'">
+        <button class="mt2" @click=" review('done')">
           Ok, got it scheduled
         </button>
       </div>
 
       <!-- MISC -->
-      <div class="flex gap" v-if=" store.queueCard.type == 'misc' || !store.queueCard.type ">
-        <button class="mt2" @click=" review('show-next') ">
+      <div class="flex gap" v-if="store.queueCard.type == 'misc' || !store.queueCard.type">
+        <button class="mt2" @click=" review('show-next')">
           I already knew that...
         </button>
-        <button class="mt2" @click=" review('cool-thanks') ">
+        <button class="mt2" @click=" review('cool-thanks')">
           Cool, thanks!
         </button>
       </div>
