@@ -216,7 +216,7 @@ function openQueueCard(id) {
       cards loading...
     </p>
     <div class="flex flex-column gap border-left p1">
-      <div class="flex flex-column ">
+      <div class="flex flex-column " style="max-height: 100%">
         <button class="m1" v-for="card in store.cards" :key="card.id" @click="openQueueCard(card.id)">
           <small>
             {{ card.front.length > 25 ? card.front.substring(0, 30) + '...' : card.front }}
