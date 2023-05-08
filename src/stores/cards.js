@@ -20,7 +20,7 @@ export const useCardsStore = defineStore({
         // only get cards that are due or past due, and are active
         const filteredCards = state.cards.filter((c) => (!c.due || c.due < new Date())
           && (c.is_active === true || c.is_active === "True"));
-          
+
         if (filteredCards.length > 0) {
           state.queueCard = filteredCards[Math.floor(Math.random() * filteredCards.length)];
           state.cardsLeftToDo = true;
@@ -33,6 +33,13 @@ export const useCardsStore = defineStore({
     }
   },
   actions: {
+    async openQueueCard(id) {
+      console.log('opening queue card with id: ', id);
+      // set queueCard to card with id
+      const card = this.cards.find((c) => c.id === id);
+      this.queueCard = card;
+      this.cardsLeftToDo = true;
+    },
     async loadCardsFromPouchDB() {
       // load cards from pouchDB, using arrow function to preserve 'this'
       db.allDocs({ include_docs: true, descending: true }, (err, doc) => {
@@ -107,7 +114,7 @@ export const useCardsStore = defineStore({
         console.log('card not found');
       }
     },
-    getNewQueueCard() {
+    async getNewQueueCard() {
       // filter for cards where due does not exist or is in the past, also type cannot be undefined
       try {
         let randomCard = {};

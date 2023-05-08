@@ -20,7 +20,7 @@ const isRevealed = ref(false)
 function review(feedback) {
   isRevealed.value = false
   // logic to update card
-  // TODO:add missing properties when necessary: occurrences, ease, due, parents, children, siblings
+  // TODO: add missing properties when necessary: occurrences, ease, due, parents, children, siblings
   // handle due logic (TODO: differentiate between card types and feedback, for now always set to 24 hours from now
   // HANDLE LOGIC WHEN 'learn'
   const card = store.queueCard
@@ -53,11 +53,16 @@ function review(feedback) {
 // use card value as a ref
 const card = ref(store.queueCard)
 
-function deleteCard () {
+function deleteCard() {
   if (confirm('Are you sure you want to delete this card?')) {
     store.deleteCard(store.queueCard)
     store.getNewQueueCard()
   }
+}
+
+function openQueueCard(id) {
+  console.log('Queue: opening card with id: ', id)
+  store.openQueueCard(id)
 }
 </script>
 
@@ -81,17 +86,15 @@ function deleteCard () {
       <button v-if="store.cardsLeftToDo && store.queueCard" @click="deleteCard">
         Delete
       </button>
-
-
     </div>
-    <div class="flex-auto flex flex-column items-center" v-if="store.cardsLeftToDo">
+    <div class="flex-auto flex flex-column items-center p2" v-if="store.cardsLeftToDo">
       <div id="card" class="bg-blue max-width-4 fit mb4" style="width: 100%">
         <div id="card-info" class="mb2 flex gap ">
           <code class="">{{ store.queueCard.type }}</code>
           <div class="border-right"></div>
           <code v-for="tag in store.queueCard.taglist" class="border-right" :key="tag">
-              {{ tag }}
-            </code>
+                    {{ tag }}
+                  </code>
         </div>
         <div class="p2 border fit">
           <Markdown id="front" class="" :source="store.queueCard.front" />
@@ -160,8 +163,6 @@ function deleteCard () {
         </button>
       </div>
 
-
-
       <!-- ARTICLE -->
       <div class="flex gap" v-if="store.queueCard.type == 'article'">
         <button class="mt2" @click=" review('not-today')">
@@ -214,6 +215,13 @@ function deleteCard () {
     <p v-else class="center flex-auto">
       cards loading...
     </p>
+    <div class="flex flex-column gap border-left p1">
+      <div class="flex flex-column ">
+        <button class="m1" v-for="card in store.cards" :key="card.id" @click="openQueueCard(card.id)">
+          {{ card.front }}
+        </button>
+      </div>
+    </div>
 
   </div>
 </template>
