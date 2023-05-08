@@ -20,8 +20,8 @@ const isRevealed = ref(false)
 function review(feedback) {
   isRevealed.value = false
   // logic to update card
-  // TODO:add missing properties when necessary: occurrences, ease, due_at, parents, children, siblings
-  // handle due_at logic (TODO: differentiate between card types and feedback, for now always set to 24 hours from now
+  // TODO:add missing properties when necessary: occurrences, ease, due, parents, children, siblings
+  // handle due logic (TODO: differentiate between card types and feedback, for now always set to 24 hours from now
   // HANDLE LOGIC WHEN 'learn'
   const card = store.queueCard
 
@@ -43,7 +43,7 @@ function review(feedback) {
     console.log('outputData', outputData)
 
   }
-  card.due_at = new Date(Date.now() + 24 * 60 * 60 * 1000)
+  card.due = new Date(Date.now() + 24 * 60 * 60 * 1000)
   console.log('sending card to store: ', card)
 
   store.updateCard(card)

@@ -18,7 +18,7 @@ export const useCardsStore = defineStore({
       // if queueCard is empty, set it to a random new one
       if (!state.queueCard) {
         // only get cards that are due or past due, and are active
-        const filteredCards = state.cards.filter((c) => (!c.due_at || c.due_at < new Date())
+        const filteredCards = state.cards.filter((c) => (!c.due || c.due < new Date())
           && (c.is_active === true || c.is_active === "True"));
           
         if (filteredCards.length > 0) {
@@ -108,7 +108,7 @@ export const useCardsStore = defineStore({
       }
     },
     getNewQueueCard() {
-      // filter for cards where due_at does not exist or is in the past, also type cannot be undefined
+      // filter for cards where due does not exist or is in the past, also type cannot be undefined
       try {
         let randomCard = {};
         // only get cards that are due or past due, and are active
@@ -116,7 +116,7 @@ export const useCardsStore = defineStore({
         const types = ['learn', 'todo', 'habit', 'check', 'misc', 'article', 'book'];
         const randomType = types[Math.floor(Math.random() * types.length)];
         console.log('picking card of random type: ', randomType);
-        // filter for cards where due_at does not exist or is in the past, also type cannot be undefined, also is_active must be true or "True", and conform to randomType
+        // filter for cards where due does not exist or is in the past, also type cannot be undefined, also is_active must be true or "True", and conform to randomType
         let filteredCards = this.cards.filter((c) => (
           (c.due < new Date() || !c.due) &&
           (c.is_active === true || c.is_active === "True") &&
@@ -129,7 +129,7 @@ export const useCardsStore = defineStore({
         } else {
           this.cardsLeftToDo = false;
           console.log('no cards match type, trying again without type');
-          filteredCards = this.cards.filter((c) => (!c.due_at || c.due_at < new Date())
+          filteredCards = this.cards.filter((c) => (!c.due || c.due < new Date())
             && (c.is_active === true || c.is_active === "True"));
           if (filteredCards.length > 0) {
             this.cardsLeftToDo = true;
