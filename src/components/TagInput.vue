@@ -3,7 +3,7 @@
         <ul class="tags mt2 mb2">
             <code v-for="tag in tags" :key="tag" class="tag">
                 {{ tag }}
-                <button class="delete" @click="removeTag(index)">x</button>
+                <button class="delete" @click="removeTag(tag)">x</button>
             </code>
         </ul>
         <input v-model="newTag" type="text" placeholder="Add new tag and press Tab" @keydown.prevent.tab="addTag(newTag)" />
@@ -27,8 +27,9 @@ export default {
             newTag.value = ""; // reset newTag
         };
 
-        const removeTag = (index) => {
-            tags.value.splice(index, 1);
+        const removeTag = (tagName) => {
+            // find tag by string matching the value
+            tags.value = tags.value.filter((tag) => tag !== tagName);
         };
 
         const onTagsChange = () => {
