@@ -20,7 +20,7 @@
 
         <hr>
 
-        <TagInput v-model="card.taglist" />
+        <TagInput v-model="editCard.taglist" />
         <!-- is_active, is_priority, is_started -->
         <div class="flex gap items-center">
             <input type="checkbox" id="is_active" v-model="editCard.is_active">
@@ -111,6 +111,8 @@ export default {
                     taglist: [],
                     due: new Date()
                 }
+                tags.value = []
+                console.log('COMPONENT: addCard, tags are now: ', tags.value)
             }
             else if (props.mode == "edit") {
                 console.log('COMPONENT: updateCard', editCard.value)

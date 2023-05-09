@@ -1,6 +1,5 @@
 ## MUST
 
-* deleting tags deletes the wrong tag
 * make SR do something
 
 ## SHOULD
