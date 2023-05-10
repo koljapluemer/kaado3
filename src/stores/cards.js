@@ -138,7 +138,7 @@ export const useCardsStore = defineStore({
           console.log('nrOfStartedBooks: ', nrOfStartedBooks);
           if (nrOfStartedBooks < 5) {
             // attempt to set another random book active
-            const inactiveBooks = filteredCards.filter((c) => c.is_started === false);
+            const inactiveBooks = filteredCards.filter((c) => c.is_started === false || c.is_started === "False" || !c.is_started);
             if (inactiveBooks.length > 0) {
               const randomInactiveBook = inactiveBooks[Math.floor(Math.random() * inactiveBooks.length)];
               console.log('randomInactiveBook: ', randomInactiveBook);
