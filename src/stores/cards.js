@@ -128,11 +128,31 @@ export const useCardsStore = defineStore({
           (c.due < new Date() || !c.due) &&
           (c.is_active === true || c.is_active === "True") &&
           c.type === randomType));
+
         // if no cards match, do again without type
         if (filteredCards.length > 0) {
+
+        // if book, special handling
+        if (randomType === 'book') {
+          const nrOfStartedBooks = filteredCards.filter((c) => c.is_started === true).length;
+          console.log('nrOfStartedBooks: ', nrOfStartedBooks);
+          if (nrOfStartedBooks < 5) {
+            // attempt to set another random book active
+            const inactiveBooks = filteredCards.filter((c) => c.is_started === false);
+            if (inactiveBooks.length > 0) {
+              const randomInactiveBook = inactiveBooks[Math.floor(Math.random() * inactiveBooks.length)];
+              console.log('randomInactiveBook: ', randomInactiveBook);
+              randomInactiveBook.is_started = true;
+            }
+          }
+          randomCard = filteredCards.find((c) => c.is_started === true);
+          console.log("new book for queue: ", randomCard);
+        } else {
           randomCard = filteredCards[Math.floor(Math.random() * filteredCards.length)];
           console.log('new queue card: ', randomCard);
           this.cardsLeftToDo = true;
+        }
+
         } else {
           this.cardsLeftToDo = false;
           console.log('no cards match type, trying again without type');
