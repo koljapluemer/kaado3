@@ -1,6 +1,7 @@
 ## MUST
 
 * make SR do something
+* test whether deletion works
 
 ## SHOULD
 

@@ -90,9 +90,9 @@ export const useCardsStore = defineStore({
       }
       );
     },
-    async deleteCard(front) {
+    async deleteCard(card) {
       // find index of card by front
-      const index = this.cards.findIndex((c) => c.front === front);
+      const index = this.cards.findIndex((c) => c.id === card.id);
       console.log('index: ', index);
       if (index !== -1) {
         // delete from pouchDB
