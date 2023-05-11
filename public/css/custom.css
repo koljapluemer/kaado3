@@ -24,3 +24,8 @@ textarea {
 .w-full {
     width: 100%;
 }
+
+.icon {
+    width: 16px;
+    cursor: pointer;
+}
