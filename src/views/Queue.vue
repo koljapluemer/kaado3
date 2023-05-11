@@ -233,6 +233,5 @@ const cards = computed(() => {
         </button>
       </div>
     </div>
-
   </div>
 </template>

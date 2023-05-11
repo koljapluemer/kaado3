@@ -46,7 +46,7 @@
         </summary>
         {{ card }}
         <br>
-        current date: {{ Date.now() + 0 }}
+        current date: {{ new Date() }}
     </details>
 </template>
 
