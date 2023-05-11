@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, computed } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useCardsStore } from '../stores/cards'
 import Markdown from "vue3-markdown-it";
@@ -64,6 +64,14 @@ function openQueueCard(id) {
   console.log('Queue: opening card with id: ', id)
   store.openQueueCard(id)
 }
+
+// allow to filter card by having a computed cards array based on store.cards
+const searchTerm = ref('')
+const cards = computed(() => {
+  return store.cards.filter(card => {
+    return card.front.toLowerCase().includes(searchTerm.value.toLowerCase())
+  })
+})
 </script>
 
 <template>
@@ -215,9 +223,10 @@ function openQueueCard(id) {
     <p v-else class="center flex-auto">
       cards loading...
     </p>
-    <div class="flex flex-column gap border-left p1">
+    <div class="flex flex-column gap border-left p1" style="min-width: 350px ;">
+      <input type="text" v-model="searchTerm" placeholder="Filter cards..." class="p1" />
       <div class="flex flex-column overflow-auto" style="max-height: 70vh">
-        <button class="m1" v-for="card in store.cards" :key="card.id" @click="openQueueCard(card.id)">
+        <button class="m1" v-for="card in cards" :key="card.id" @click="openQueueCard(card.id)">
           <small>
             {{ card.front.length > 25 ? card.front.substring(0, 30) + '...' : card.front }}
           </small>

@@ -2,6 +2,7 @@
 
 * make SR do something
 * test whether deletion works
+* bug: books are not getting updated in db when done
 
 ## SHOULD
 
