@@ -29,3 +29,9 @@ textarea {
     width: 16px;
     cursor: pointer;
 }
+
+#queue-buttons {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+}

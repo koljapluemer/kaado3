@@ -101,8 +101,8 @@ const cards = computed(() => {
           <code class="">{{ store.queueCard.type }}</code>
           <div class="border-right"></div>
           <code v-for="tag in store.queueCard.taglist" class="border-right" :key="tag">
-                          {{ tag }}
-                        </code>
+                            {{ tag }}
+                          </code>
         </div>
         <div class="p2 border fit">
           <Markdown id="front" class="" :source="store.queueCard.front" />
@@ -114,110 +114,114 @@ const cards = computed(() => {
 
       </div>
 
-      <!-- LEARN -->
-      <div v-if="store.queueCard.type == 'learn'">
-        <button class="mt2" @click=" isRevealed = !isRevealed" v-if="!isRevealed">
-          Reveal
-        </button>
-        <div class="flex gap" v-else>
-          <button class="mt2" @click=" review('wrong')">
-            Wrong
+      <div id="queue-buttons" class="border-top p1 flex justify-center">
+
+        <!-- LEARN -->
+        <div v-if="store.queueCard.type == 'learn'">
+          <button class="mt2 button-primary" @click=" isRevealed = !isRevealed" v-if="!isRevealed">
+            Reveal
           </button>
-          <button class="mt2" @click=" review('good')">
-            Good
+          <div class="flex gap" v-else>
+            <button class="mt2 button-primary" @click=" review('wrong')">
+              Wrong
+            </button>
+            <button class="mt2 button-primary" @click=" review('good')">
+              Good
+            </button>
+            <button class="mt2 button-primary" @click=" review('easy')">
+              Easy
+            </button>
+          </div>
+        </div>
+
+        <!-- HABIT -->
+        <div class="flex gap" v-if="store.queueCard.type == 'habit'">
+          <button class="mt2 button-primary" @click=" review('not-today')">
+            Not Today
           </button>
-          <button class="mt2" @click=" review('easy')">
-            Easy
+          <button class="mt2 button-primary" @click=" review('do-later')">
+            Do Later
+          </button>
+          <button class="mt2 button-primary" @click=" review('done')">
+            Done
           </button>
         </div>
-      </div>
 
-      <!-- HABIT -->
-      <div class="flex gap" v-if="store.queueCard.type == 'habit'">
-        <button class="mt2" @click=" review('not-today')">
-          Not Today
-        </button>
-        <button class="mt2" @click=" review('do-later')">
-          Do Later
-        </button>
-        <button class="mt2" @click=" review('done')">
-          Done
-        </button>
-      </div>
+        <!-- CHECK -->
+        <div class="flex gap" v-if="store.queueCard.type == 'check'">
+          <button class="mt2 button-primary" @click=" review('no')">
+            No
+          </button>
+          <button class="mt2 button-primary" @click=" review('kind-of')">
+            Kind Of
+          </button>
+          <button class="mt2 button-primary" @click=" review('yes')">
+            Yes
+          </button>
+        </div>
 
-      <!-- CHECK -->
-      <div class="flex gap" v-if="store.queueCard.type == 'check'">
-        <button class="mt2" @click=" review('no')">
-          No
-        </button>
-        <button class="mt2" @click=" review('kind-of')">
-          Kind Of
-        </button>
-        <button class="mt2" @click=" review('yes')">
-          Yes
-        </button>
-      </div>
+        <!-- TODO -->
+        <div class="flex gap" v-if="store.queueCard.type == 'todo'">
+          <button class="mt2 button-primary" @click=" review('not-today')">
+            Not Today
+          </button>
+          <button class="mt2 button-primary" @click=" review('do-later')">
+            Do Later
+          </button>
+          <button class="mt2 button-primary" @click=" review('done')">
+            Done
+          </button>
+        </div>
 
-      <!-- TODO -->
-      <div class="flex gap" v-if="store.queueCard.type == 'todo'">
-        <button class="mt2" @click=" review('not-today')">
-          Not Today
-        </button>
-        <button class="mt2" @click=" review('do-later')">
-          Do Later
-        </button>
-        <button class="mt2" @click=" review('done')">
-          Done
-        </button>
-      </div>
+        <!-- ARTICLE -->
+        <div class="flex gap" v-if="store.queueCard.type == 'article'">
+          <button class="mt2 button-primary" @click=" review('not-today')">
+            Not Today
+          </button>
+          <button class="mt2 button-primary" @click=" review('do-later')">
+            Do Later
+          </button>
+          <button class="mt2 button-primary" @click=" review('made-some-progress')">
+            Made Some Progress
+          </button>
+          <button class="mt2 button-primary" @click=" review('finished')">
+            Finished
+          </button>
+        </div>
 
-      <!-- ARTICLE -->
-      <div class="flex gap" v-if="store.queueCard.type == 'article'">
-        <button class="mt2" @click=" review('not-today')">
-          Not Today
-        </button>
-        <button class="mt2" @click=" review('do-later')">
-          Do Later
-        </button>
-        <button class="mt2" @click=" review('made-some-progress')">
-          Made Some Progress
-        </button>
-        <button class="mt2" @click=" review('finished')">
-          Finished
-        </button>
-      </div>
+        <!-- BOOK -->
+        <div class="flex gap" v-if="store.queueCard.type == 'book'">
+          <button class="mt2 button-primary" @click=" review('not-today')">
+            Not Today
+          </button>
+          <button class="mt2 button-primary" @click=" review('do-later')">
+            Do Later
+          </button>
+          <button class="mt2 button-primary" @click=" review('done')">
+            Done
+          </button>
+          <button class="mt2 button-primary" @click=" review('finished')">
+            Finished Book
+          </button>
+        </div>
 
-      <!-- BOOK -->
-      <div class="flex gap" v-if="store.queueCard.type == 'book'">
-        <button class="mt2" @click=" review('not-today')">
-          Not Today
-        </button>
-        <button class="mt2" @click=" review('do-later')">
-          Do Later
-        </button>
-        <button class="mt2" @click=" review('done')">
-          Done
-        </button>
-        <button class="mt2" @click=" review('finished')">
-          Finished Book
-        </button>
-      </div>
+        <!-- PROJECT -->
+        <div class="flex gap" v-if="store.queueCard.type == 'project'">
+          <button class="mt2 button-primary" @click=" review('done')">
+            Ok, got it scheduled
+          </button>
+        </div>
 
-      <!-- PROJECT -->
-      <div class="flex gap" v-if="store.queueCard.type == 'project'">
-        <button class="mt2" @click=" review('done')">
-          Ok, got it scheduled
-        </button>
-      </div>
+        <!-- MISC -->
+        <div class="flex gap" v-if="store.queueCard.type == 'misc' || !store.queueCard.type">
+          <button class="mt2 button-primary" @click=" review('show-next')">
+            I already knew that...
+          </button>
+          <button class="mt2 button-primary" @click=" review('cool-thanks')">
+            Cool, thanks!
+          </button>
+        </div>
 
-      <!-- MISC -->
-      <div class="flex gap" v-if="store.queueCard.type == 'misc' || !store.queueCard.type">
-        <button class="mt2" @click=" review('show-next')">
-          I already knew that...
-        </button>
-        <button class="mt2" @click=" review('cool-thanks')">
-          Cool, thanks!
-        </button>
       </div>
     </div>
     <p v-else class="center flex-auto">
@@ -240,15 +244,15 @@ const cards = computed(() => {
 
           <router-link v-slot="{ editOther }" class="flex items-center justify-center"
             :to="{ name: 'CardEdit', params: { id: card.id } }">
-            <svg class="icon" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" @click="editOther"
-            xmlns="http://www.w3.org/2000/svg">
-            <path
-              d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L6.832 19.82a4.5 4.5 0 01-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 011.13-1.897L16.863 4.487zm0 0L19.5 7.125"
-              stroke-linecap="round" stroke-linejoin="round"></path>
-          </svg>
+            <svg class="icon" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
+              @click="editOther" xmlns="http://www.w3.org/2000/svg">
+              <path
+                d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L6.832 19.82a4.5 4.5 0 01-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 011.13-1.897L16.863 4.487zm0 0L19.5 7.125"
+                stroke-linecap="round" stroke-linejoin="round"></path>
+            </svg>
           </router-link>
 
-        
+
           <svg class="icon" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
             xmlns="http://www.w3.org/2000/svg">
             <path

@@ -10,3 +10,5 @@
 * write a better book selector
 * reset tags for new cards
 * less scary transition when new card
+* display interval for habits etc.
+* an empty tag seems to be generated sometimes (only for imported cards?)
