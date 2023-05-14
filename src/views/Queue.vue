@@ -67,11 +67,11 @@ function openQueueCard(id) {
 
 // allow to filter card by having a computed cards array based on store.cards
 const searchTerm = ref('')
-const cards = computed(() => {
-  return store.cards.filter(card => {
-    return card.front.toLowerCase().includes(searchTerm.value.toLowerCase())
-  })
-})
+// const cards = computed(() => {
+//   return store.cards.filter(card => {
+//     return card.front.toLowerCase().includes(searchTerm.value.toLowerCase())
+//   })
+// })
 </script>
 
 <template>
@@ -227,7 +227,7 @@ const cards = computed(() => {
     <p v-else class="center flex-auto">
       cards loading...
     </p>
-    <div class="flex flex-column gap border-left p1" style="min-width: 350px ;">
+    <!-- <div class="flex flex-column gap border-left p1" style="min-width: 350px ;">
       <input type="text" v-model="searchTerm" placeholder="Filter cards..." class="p1" />
       <div class="flex flex-column overflow-auto" style="max-height: 70vh">
         <div class="m1 flex gap items-center" v-for="card in cards" :key="card.id">
@@ -261,6 +261,6 @@ const cards = computed(() => {
           </svg>
         </div>
       </div>
-    </div>
+    </div> -->
   </div>
 </template>
