@@ -3,6 +3,7 @@
 * make SR do something
 * test whether deletion works
 * bug: books are not getting updated in db when done
+* bug: really long cards in q overflow in a weird way
 
 ## SHOULD
 
