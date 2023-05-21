@@ -4,6 +4,7 @@ import CardList from "../views/CardList.vue";
 import CardAdd from "../views/CardAdd.vue";
 import CardImport from "../views/CardImport.vue";
 import CardEdit from "../views/CardEdit.vue";
+import CardExport from "../views/CardExport.vue";
 
 const routes = [
   {
@@ -30,7 +31,13 @@ const routes = [
     path: "/cardedit/:id",
     name: "CardEdit",
     component: CardEdit,
-  }
+  },
+  {
+    path: "/cardexport",
+    name: "CardExport",
+    component: () => import("../views/CardExport.vue"),
+  },
+
 ];
 
 const router = createRouter({

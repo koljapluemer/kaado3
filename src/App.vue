@@ -14,6 +14,9 @@
         <li class="m2">
           <router-link :to="{ name: 'CardImport' }">Import Cards</router-link>
         </li>
+        <li class="m2">
+          <router-link :to="{ name: 'CardExport' }">Export Cards</router-link>
+        </li>
       </nav>
 
     </header>
