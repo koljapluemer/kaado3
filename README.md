@@ -1,14 +1,15 @@
 # Kaado3
 
-## Acceptance Criteria
-
-- [ ] make something I'm proud of
-- [ ] learn something new
+An old web-based note-taking/zettelkasten app I did a while ago.
 
 
-## Contributing & Running Locally
+## Teach
 
-1. clone this repository to your local machine
+- Js
+- Vue
+- Pinia + CouchDB
 
+## Running it
 
-## Credit
+- `npm i`
+- `npm run serve`
