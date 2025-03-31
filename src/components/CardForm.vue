@@ -50,84 +50,63 @@
     </details>
 </template>
 
-<script>
-import { ref, watch, reactive } from 'vue'
-import { useCardsStore } from '../stores/cards'
-
-import { defineProps } from 'vue'
-// import local component TagInput
+<script setup>
+import { ref, watch } from 'vue'
+import { useCards } from '../stores/cards'
 import TagInput from '../components/TagInput.vue'
-import { v4 as uuidv4 } from 'uuid';
+import { v4 as uuidv4 } from 'uuid'
 
-export default {
-    name: 'CardForm',
-    props: ['card', 'mode'],
-    components: {
-        TagInput
-    },
-    setup(props) {
-        const store = useCardsStore()
+const props = defineProps(['card', 'mode'])
+const { addCard, updateCard: updateCardStore } = useCards()
 
-        // props "editCard" and "mode" are passed in 
-        // mode is either "edit" or "add"
-        const editCard = ref(props.card)
-        // if tags of card is a string, convert to array
-        if (typeof editCard.value.tags == 'string' && !editCard.value.taglist) {
-            editCard.value.taglist = editCard.value.tags.split(' ')
-        } else {
-            // if taglist does not exist, create empty array
-            if (!editCard.value.taglist) {
-                editCard.value.taglist = []
-            }
-        }
-
-
-        const tags = ref([])
-        // add a watcher for tags that sets cards.taglist
-        // when tags changes
-        // this is needed because the tags input component is not reactive?!
-        watch(tags, (newVal, oldVal) => {
-            console.log('watch tags', newVal, oldVal)
-            editCard.value.taglist = newVal
-        })
-
-        function updateCard() {
-            console.log('COMPONENT: updateCard')
-            if (props.mode == "add") {
-                console.log('COMPONENT: addCard', editCard.value)
-                store.addCard(editCard.value)
-                editCard.value = {
-                    id: uuidv4(),
-                    is_active: true,
-                    is_priority: false,
-                    is_started: false,
-                    occurrences: 0,
-                    ease: 1,
-                    repetitions: 0,
-                    interval: 1,
-                    type: 'misc',
-                    front: '',
-                    back: '',
-                    taglist: [],
-                    due: new Date()
-                }
-                tags.value = []
-                console.log('COMPONENT: addCard, tags are now: ', tags.value)
-            }
-            else if (props.mode == "edit") {
-                console.log('COMPONENT: updateCard', editCard.value)
-                store.updateCard(editCard.value)
-            }
-        }
-
-
-        return {
-            editCard,
-            tags,
-            updateCard
-        }
-
+// props "editCard" and "mode" are passed in 
+// mode is either "edit" or "add"
+const editCard = ref(props.card)
+// if tags of card is a string, convert to array
+if (typeof editCard.value.tags == 'string' && !editCard.value.taglist) {
+    editCard.value.taglist = editCard.value.tags.split(' ')
+} else {
+    // if taglist does not exist, create empty array
+    if (!editCard.value.taglist) {
+        editCard.value.taglist = []
     }
 }
 
+const tags = ref([])
+// add a watcher for tags that sets cards.taglist
+// when tags changes
+// this is needed because the tags input component is not reactive?!
+watch(tags, (newVal, oldVal) => {
+    console.log('watch tags', newVal, oldVal)
+    editCard.value.taglist = newVal
+})
+
+function updateCard() {
+    console.log('COMPONENT: updateCard')
+    if (props.mode == "add") {
+        console.log('COMPONENT: addCard', editCard.value)
+        addCard(editCard.value)
+        editCard.value = {
+            id: uuidv4(),
+            is_active: true,
+            is_priority: false,
+            is_started: false,
+            occurrences: 0,
+            ease: 1,
+            repetitions: 0,
+            interval: 1,
+            type: 'misc',
+            front: '',
+            back: '',
+            taglist: [],
+            due: new Date()
+        }
+        tags.value = []
+        console.log('COMPONENT: addCard, tags are now: ', tags.value)
+    }
+    else if (props.mode == "edit") {
+        console.log('COMPONENT: updateCard', editCard.value)
+        updateCardStore(editCard.value)
+    }
+}
 </script>

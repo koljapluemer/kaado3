@@ -9,36 +9,36 @@
         <input v-model="newTag" type="text" placeholder="Add new tag and press Tab" @keydown.prevent.tab="addTag(newTag)" />
     </div>
 </template>
-<script>
-import { ref } from 'vue'
-export default {
-    props: {
-        modelValue: { type: Array, default: () => [] },
-    },
-    setup(props, { emit }) {
-        const tags = ref(props.modelValue);
 
-        // const tags = ref(['what', 'up']);
-        const newTag = ref('') //keep up with new tag
+<script setup>
+import { ref, watch } from 'vue'
 
-        const addTag = (tag) => {
-            tags.value.push(tag); // add the new tag to the tags array
-            console.log(tags.value);
-            newTag.value = ""; // reset newTag
-        };
+const props = defineProps({
+    modelValue: { type: Array, default: () => [] }
+})
 
-        const removeTag = (tagName) => {
-            // find tag by string matching the value
-            tags.value = tags.value.filter((tag) => tag !== tagName);
-        };
+const emit = defineEmits(['update:modelValue'])
 
-        const onTagsChange = () => {
-            emit("update:modelValue", tags.value)
-        }
+const tags = ref(props.modelValue)
+const newTag = ref('')
 
-        return { tags, newTag, addTag, removeTag };
+const addTag = (tag) => {
+    if (tag.trim()) {
+        tags.value.push(tag.trim())
+        newTag.value = ""
+        emit('update:modelValue', tags.value)
     }
 }
+
+const removeTag = (tagName) => {
+    tags.value = tags.value.filter((tag) => tag !== tagName)
+    emit('update:modelValue', tags.value)
+}
+
+// Watch for external changes to modelValue
+watch(() => props.modelValue, (newValue) => {
+    tags.value = newValue
+})
 </script>
 
 <style scoped>
@@ -80,7 +80,7 @@ input {
 }
 
 .delete {
-    margin: 0 ;
-    padding: 0 
+    margin: 0;
+    padding: 0;
 }
 </style>

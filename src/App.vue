@@ -18,13 +18,10 @@
           <router-link :to="{ name: 'CardExport' }">Export Cards</router-link>
         </li>
       </nav>
-
     </header>
 
-
     <main>
-      <div class="" v-if="!store.cardsLoaded">loading...</div>
-      <router-view v-else />
+      <router-view />
     </main>
   </div>
   <!-- 
@@ -32,12 +29,7 @@
     src="//gc.zgo.at/count.js"></component> -->
 </template>
 <script setup>
-import { useCardsStore } from './stores/cards'
-import { watch } from 'vue'
+import { useCards } from './stores/cards'
 
-const store = useCardsStore()
-// run loadCardsFromPouchDB()  first thing
-store.loadCardsFromPouchDB()
-
-
+const { cards, queueCard, cardsLeftToDo, getQueueCard, openQueueCard, addCard, updateCard, deleteCard, getNewQueueCard } = useCards()
 </script>

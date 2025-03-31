@@ -1,9 +1,6 @@
 <script setup>
 import { v4 as uuidv4 } from 'uuid';
-
-import { useCardsStore } from '../stores/cards'
 import CardForm from '../components/CardForm.vue'
-
 </script>
 
 <template>
@@ -22,6 +19,4 @@ import CardForm from '../components/CardForm.vue'
             taglist: [],
             due: new Date()
       }" :mode="'add'" />
-
-  
 </template>

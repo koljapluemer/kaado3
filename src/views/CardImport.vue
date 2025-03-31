@@ -1,16 +1,16 @@
 <script setup>
 import { ref } from 'vue'
 import { VueCsvToggleHeaders, VueCsvSubmit, VueCsvMap, VueCsvInput, VueCsvErrors, VueCsvImport } from 'vue-csv-import';
-import { useCardsStore } from '../stores/cards'
+import { useCards } from '../stores/cards'
 
-const store = useCardsStore()
+const { cards } = useCards()
 
 const csvCards = ref([])
 async function importCards() {
     console.log(`importing ${csvCards.value.length} cards`)
-    // append cards to store
-    store.cards = [...store.cards, ...csvCards.value]
-    console.log(`Store now has ${store.cards.length} cards`)
+    // append cards to cards ref
+    cards.value = [...cards.value, ...csvCards.value]
+    console.log(`Store now has ${cards.value.length} cards`)
 }
 </script>
 

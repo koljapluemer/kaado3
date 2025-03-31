@@ -1,12 +1,12 @@
 <script setup>
 import { ref } from 'vue'
 import { VueCsvToggleHeaders, VueCsvSubmit, VueCsvMap, VueCsvInput, VueCsvErrors, VueCsvImport } from 'vue-csv-import';
-import { useCardsStore } from '../stores/cards'
+import { useCards } from '../stores/cards'
 
-const store = useCardsStore()
+const { cards } = useCards()
 
 const filename = 'data.json';
-const jsonStr = JSON.stringify(store.cards);
+const jsonStr = JSON.stringify(cards.value);
 
 let element = document.createElement('a');
 element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(jsonStr));
@@ -18,7 +18,6 @@ document.body.appendChild(element);
 element.click();
 
 document.body.removeChild(element);
-
 </script>
 
 <template>

@@ -1,18 +1,17 @@
 <!-- edit card, getting id from router -->
 <script setup>
-import { ref } from 'vue'
-import { useCardsStore } from '../stores/cards'
+import { ref, computed } from 'vue'
+import { useCards } from '../stores/cards'
 import { useRoute } from 'vue-router'
 import CardForm from '../components/CardForm.vue'
 
-const store = useCardsStore()
+const { cards } = useCards()
 const route = useRoute()
 
 // get id from router
 const id = route.params.id
-// get card from store
-const card = store.cards.find(card => card.id === id)
-
+// get card from cards ref
+const card = computed(() => cards.value.find(card => card.id === id))
 </script>
 
 <template>

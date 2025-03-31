@@ -1,9 +1,10 @@
 <script setup>
 import { ref, onMounted, computed } from 'vue'
-import { useCardsStore } from '../stores/cards'
-const store = useCardsStore()
+import { useCards } from '../stores/cards'
 
-// allow to filter card by having a computed cards array based on store.cards
+const { cards } = useCards()
+
+// allow to filter card by having a computed cards array based on cards ref
 const searchTerm = ref('')
 const tagSearchTerm = ref('')
 const cardTags = ref([])
@@ -19,23 +20,21 @@ const tags = computed(() => {
     })
 })
 
-
 // extract tags from cards once at mounted
 onMounted(() => {
     // extract all tags from cards and create a list storing the name of tag and a bool that is true by default
     // only unique tags
-    const tagsFromCards = store.cards.flatMap(card => card.taglist).filter((tag, index, self) => {
+    const tagsFromCards = cards.value.flatMap(card => card.taglist).filter((tag, index, self) => {
         return self.indexOf(tag) === index
     })
     console.log('tagsFromCards', tagsFromCards)
     cardTags.value = tagsFromCards.map(tag => {
         return { name: tag, selected: true }
     })
-
 })
 
-const cards = computed(() => {
-    const cardsFilteredBySearch = store.cards.filter(card => {
+const filteredCards = computed(() => {
+    const cardsFilteredBySearch = cards.value.filter(card => {
         return card.front.toLowerCase().includes(searchTerm.value.toLowerCase())
     })
     // filter by tags, depending on state of tagsHideCards and cardsMustHaveAllTags
@@ -71,13 +70,11 @@ const cards = computed(() => {
     })
     return cardsFilteredByTags
 })
-
 </script>
 
 <template>
     <div class="flex">
         <div class="flex flex-column gap border-right  p1" style="min-width: 350px ;">
-
             <div>
                 <!-- select between show and hide (dropdown with options) -->
                 <select v-model="tagsHideCards">
@@ -103,7 +100,7 @@ const cards = computed(() => {
         <div class="flex flex-column gap  p1" style="min-width: 350px ;">
             <input type="text" v-model="searchTerm" placeholder="Filter cards..." class="p1" />
             <div class="flex flex-column overflow-auto" style="max-height: 70vh">
-                <div class="m1 flex gap items-center" v-for="card in cards" :key="card.id">
+                <div class="m1 flex gap items-center" v-for="card in filteredCards" :key="card.id">
                     <small class="flex-auto">
                         {{ card.front.length > 100 ? card.front.substring(0, 100) + '...' : card.front }}
                     </small>
@@ -116,7 +113,6 @@ const cards = computed(() => {
                                 stroke-linecap="round" stroke-linejoin="round"></path>
                         </svg>
                     </router-link>
-
                 </div>
             </div>
         </div>

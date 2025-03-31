@@ -1,7 +1,6 @@
 <script setup>
 import { ref, onMounted, computed } from 'vue'
-import { storeToRefs } from 'pinia'
-import { useCardsStore } from '../stores/cards'
+import { useCards } from '../stores/cards'
 import Markdown from "vue3-markdown-it";
 
 const fsrs = require("./sr.js")
@@ -10,10 +9,7 @@ const components = {
   Markdown
 }
 
-const store = useCardsStore()
-
-const currentCard = store.getQueueCard
-console.log('currentCard', currentCard)
+const { cards, queueCard, cardsLeftToDo, getQueueCard, openQueueCard, updateCard, deleteCard, getNewQueueCard } = useCards()
 
 // reveal logic
 const isRevealed = ref(false)
@@ -23,7 +19,7 @@ function review(feedback) {
   // TODO: add missing properties when necessary: occurrences, ease, due, parents, children, siblings
   // handle due logic (TODO: differentiate between card types and feedback, for now always set to 24 hours from now
   // HANDLE LOGIC WHEN 'learn'
-  const card = store.queueCard
+  const card = queueCard.value
 
   if (card.type == 'learn') {
     console.log('Grading Learn Card')
@@ -41,7 +37,6 @@ function review(feedback) {
     const globalData = null
     const outputData = fsrs(cardData, grade, globalData)
     console.log('outputData', outputData)
-
   }
 
   if (feedback == 'finished') {
@@ -51,34 +46,29 @@ function review(feedback) {
   card.due = new Date(Date.now() + 24 * 60 * 60 * 1000)
   console.log('sending card to store: ', card)
 
-  store.updateCard(card)
-  store.getNewQueueCard()
+  updateCard(card)
+  getNewQueueCard()
 }
 
-// use card value as a ref
-const card = ref(store.queueCard)
-
-function deleteCard() {
+function deleteCardHandler() {
   if (confirm('Are you sure you want to delete this card?')) {
-    store.deleteCard(store.queueCard)
-    store.getNewQueueCard()
+    deleteCard(queueCard.value)
+    getNewQueueCard()
   }
 }
 
-function openQueueCard(id) {
+function openQueueCardHandler(id) {
   console.log('Queue: opening card with id: ', id)
-  store.openQueueCard(id)
+  openQueueCard(id)
 }
-
-
 </script>
 
 <template>
   <div class="p1 flex justify-between items-start ">
     <div id="menu" class="flex flex-column gap border-right p1">
       <!-- Edit button -->
-      <router-link v-slot="{ edit }" v-if="store.cardsLeftToDo && store.queueCard"
-        :to="{ name: 'CardEdit', params: { id: store.queueCard.id } }">
+      <router-link v-slot="{ edit }" v-if="cardsLeftToDo && queueCard"
+        :to="{ name: 'CardEdit', params: { id: queueCard.id } }">
         <button @click="edit" role="link" class="w-full">
           Edit
         </button>
@@ -90,33 +80,31 @@ function openQueueCard(id) {
         </button>
       </router-link>
       <!-- open browser confirmation prompt before deleting!! -->
-      <button v-if="store.cardsLeftToDo && store.queueCard" @click="deleteCard">
+      <button v-if="cardsLeftToDo && queueCard" @click="deleteCardHandler">
         Delete
       </button>
     </div>
-    <div class="flex-auto flex flex-column items-center p2" v-if="store.cardsLeftToDo">
+    <div class="flex-auto flex flex-column items-center p2" v-if="cardsLeftToDo">
       <div id="card" class="bg-blue max-width-4 fit mb4" style="width: 100%">
         <div id="card-info" class="mb2 flex gap ">
-          <code class="">{{ store.queueCard.type }}</code>
+          <code class="">{{ queueCard.type }}</code>
           <div class="border-right"></div>
-          <code v-for="tag in store.queueCard.taglist" class="border-right" :key="tag">
-                            {{ tag }}
-                          </code>
+          <code v-for="tag in queueCard.taglist" class="border-right" :key="tag">
+            {{ tag }}
+          </code>
         </div>
         <div class="p2 border fit">
-          <Markdown id="front" class="" :source="store.queueCard.front" />
-          <div class="" v-if="isRevealed && store.queueCard.type == 'learn'">
+          <Markdown id="front" class="" :source="queueCard.front" />
+          <div class="" v-if="isRevealed && queueCard.type == 'learn'">
             <hr>
-            <Markdown id="back" v-if="isRevealed" :source="store.queueCard.back" />
+            <Markdown id="back" v-if="isRevealed" :source="queueCard.back" />
           </div>
         </div>
-
       </div>
 
       <div id="queue-buttons" class="border-top p1 flex justify-center">
-
         <!-- LEARN -->
-        <div v-if="store.queueCard.type == 'learn'">
+        <div v-if="queueCard.type == 'learn'">
           <button class="mt2 button-primary" @click=" isRevealed = !isRevealed" v-if="!isRevealed">
             Reveal
           </button>
@@ -134,7 +122,7 @@ function openQueueCard(id) {
         </div>
 
         <!-- HABIT -->
-        <div class="flex gap" v-if="store.queueCard.type == 'habit'">
+        <div class="flex gap" v-if="queueCard.type == 'habit'">
           <button class="mt2 button-primary" @click=" review('not-today')">
             Not Today
           </button>
@@ -147,7 +135,7 @@ function openQueueCard(id) {
         </div>
 
         <!-- CHECK -->
-        <div class="flex gap" v-if="store.queueCard.type == 'check'">
+        <div class="flex gap" v-if="queueCard.type == 'check'">
           <button class="mt2 button-primary" @click=" review('no')">
             No
           </button>
@@ -160,7 +148,7 @@ function openQueueCard(id) {
         </div>
 
         <!-- TODO -->
-        <div class="flex gap" v-if="store.queueCard.type == 'todo'">
+        <div class="flex gap" v-if="queueCard.type == 'todo'">
           <button class="mt2 button-primary" @click=" review('not-today')">
             Not Today
           </button>
@@ -173,7 +161,7 @@ function openQueueCard(id) {
         </div>
 
         <!-- ARTICLE -->
-        <div class="flex gap" v-if="store.queueCard.type == 'article'">
+        <div class="flex gap" v-if="queueCard.type == 'article'">
           <button class="mt2 button-primary" @click=" review('not-today')">
             Not Today
           </button>
@@ -189,7 +177,7 @@ function openQueueCard(id) {
         </div>
 
         <!-- BOOK -->
-        <div class="flex gap" v-if="store.queueCard.type == 'book'">
+        <div class="flex gap" v-if="queueCard.type == 'book'">
           <button class="mt2 button-primary" @click=" review('not-today')">
             Not Today
           </button>
@@ -205,14 +193,14 @@ function openQueueCard(id) {
         </div>
 
         <!-- PROJECT -->
-        <div class="flex gap" v-if="store.queueCard.type == 'project'">
+        <div class="flex gap" v-if="queueCard.type == 'project'">
           <button class="mt2 button-primary" @click=" review('done')">
             Ok, got it scheduled
           </button>
         </div>
 
         <!-- MISC -->
-        <div class="flex gap" v-if="store.queueCard.type == 'misc' || !store.queueCard.type">
+        <div class="flex gap" v-if="queueCard.type == 'misc' || !queueCard.type">
           <button class="mt2 button-primary" @click=" review('show-next')">
             I already knew that...
           </button>
@@ -220,7 +208,6 @@ function openQueueCard(id) {
             Cool, thanks!
           </button>
         </div>
-
       </div>
     </div>
     <p v-else class="center flex-auto">
